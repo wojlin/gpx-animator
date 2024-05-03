@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>  
+        <link href="static/css/fileUpload.css" rel="stylesheet" />
+    </head>
+
+    <body>
+
+        <div id="background">
+            <img id="background-level-1" src='static/images/level-1.png' />
+            <img id="background-level-2" src='static/images/level-2.png' />
+            <img id="background-level-3" src='static/images/level-3.png' />
+            <img id="background-level-4" src='static/images/level-4.png' />
+            <img id="background-level-5" src='static/images/level-5.png' />
+            <img id="background-level-6" src='static/images/level-6.png' />
+            <img id="background-level-7" src='static/images/level-7.png' />
+            <img id="background-level-8" src='static/images/level-8.png' />
+            <img id="background-level-9" src='static/images/level-9.png' />
+        </div>
+
+        <div id="content">
+
+            <div id="title-box">
+            </div>
+
+            <div id="content-box" class="box-panel">
+                <p id="upload-title" class="box-title">add GPX file</p>
+                <div id="gpx-upload" class="drag-area">
+                    <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <header>Drag & Drop to Upload File</header>
+                    <span>OR</span>
+                    <button>Browse File</button>
+                    <input type="file" hidden>
+                  </div>
+                <p id="upload-text"></p>
+                <button onclick="upload.nextStage();" id="gpx-next">Next Stage</button>
+            </div>
+        </div>
+
+
+        <script src="static/js/paralax.js"></script>
+        <script src="static/js/fileUpload.js"></script>
+
+    </body>
+</html>    
