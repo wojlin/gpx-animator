@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>  
-        <link href="static/css/fileUpload.css" rel="stylesheet" />
+        <script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.min.js"></script>
+        <link href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet" />
+        <link href="static/css/style.css" rel="stylesheet" />
     </head>
 
     <body>
@@ -16,6 +18,7 @@
             <img id="background-level-7" src='static/images/level-7.png' />
             <img id="background-level-8" src='static/images/level-8.png' />
             <img id="background-level-9" src='static/images/level-9.png' />
+            <img id="background-level-10" src='static/images/level-10.png' />
         </div>
 
         <div id="content">
@@ -37,8 +40,245 @@
             </div>
         </div>
 
+        <div id="image-tab">
+            <div id="image-tab-pop">
+                <button onclick="toggleImagesTab();" id="image-tab-toggle">-<br>-<br>-<br>-<br>-<br>-<br>-<br>-<br>-<br></button>
+            </div>
+            <h1>Images</h1>
+            <h2>(drag and drop them to the map)</h2>
+            <div id="image-tab-content"></div>
+        </div>
 
+        <div id="options-tab">
+            <div id="options-tab-pop">
+                <button onclick="toggleOptionsTab();" id="options-tab-toggle">-<br>-<br>-<br>-<br>-<br>-<br>-<br>-<br>-<br></button>
+            </div>
+            <h1>Options</h1>
+
+            <div id="options-tab-content">
+                <table>
+
+
+                    <tr class="options-table-row-hr"><td  class="options-table-hr">Line Options</td><td  class="options-table"></td></tr>
+
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">display line</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td class="options-table">
+                            <input type="color" id="line-color" name="line-color" value="#f6b73c" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-color">line color</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="range" id="line-width" name="line-width" minvalue="0" maxvalue="100" value="50" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">line width</label>
+                        </td>
+                    </tr>
+
+
+
+
+                    <tr class="options-table-row-hr"><td  class="options-table-hr">Glow Options</td><td  class="options-table"></td></tr>
+                    
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">display glow</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td class="options-table">
+                            <input type="color" id="line-color" name="line-color" value="#f6b73c" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-color">glow color</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="range" id="line-width" name="line-width" minvalue="0" maxvalue="100" value="50" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">glow width</label>
+                        </td>
+                    </tr>
+
+                    <tr class="options-table-row-hr"><td  class="options-table-hr">Marker Options</td><td  class="options-table"></td></tr>
+
+
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">display marker</label>
+                        </td>
+                    </tr>
+
+                    <tr class="options-table-row">
+                        <td class="options-table" id="icon-select-placeholder">
+                            <select id="icon-select">
+                                <option data-name="x mark" data-src="static/images/icons/0.png"></option>
+                                <option data-name="dot" data-src="static/images/icons/1.png"></option>
+                                <option data-name="point" data-src="static/images/icons/2.png"></option>
+                                <option data-name="plane" data-src="static/images/icons/3.png"></option>
+                                <option data-name="boots" data-src="static/images/icons/4.png"></option>
+                                <option data-name="hiker" data-src="static/images/icons/5.png"></option>
+                                <option data-name="mark" data-src="static/images/icons/6.png"></option>
+                                <option data-name="boat" data-src="static/images/icons/7.png"></option>
+                                <option data-name="pawn" data-src="static/images/icons/8.png"></option>
+                                <option data-name="dog" data-src="static/images/icons/9.png"></option>
+                              </select>
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">marker shape</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="range" id="line-width" name="line-width" minvalue="0" maxvalue="100" value="50" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">animation speed</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="range" id="line-width" name="line-width" minvalue="0" maxvalue="100" value="50" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">zoom level</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">show gpx title</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">show distance</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">show elevation</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">enable elevation</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">rotate camera</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">display photos</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="line-width" name="line-width" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">pause on photo</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="number" id="line-width" name="line-width" value="3" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">pause duration</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td class="options-table" id="mode-select-placeholder">
+                            <select id="mode-select">
+                                <option data-name="marker" data-src="static/images/icons/0.png"></option>
+                                <option data-name="animation" data-src="static/images/icons/1.png"></option>
+                              </select>
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">display type</label>
+                        </td>
+                    </tr>
+                    <tr class="options-table-row">
+                        <td class="options-table" id="mode-select-placeholder">
+                            <select id="mode-select">
+                                <option data-name="hybrid" data-src="static/images/icons/1.png"></option>
+                                <option data-name="satellite" data-src="static/images/icons/0.png"></option>
+                                <option data-name="outdoors" data-src="static/images/icons/1.png"></option>
+                                <option data-name="pastel" data-src="static/images/icons/1.png"></option>
+                                <option data-name="winter" data-src="static/images/icons/1.png"></option>
+                                <option data-name="dark" data-src="static/images/icons/1.png"></option>
+                                <option data-name="light" data-src="static/images/icons/1.png"></option>
+                              </select>
+                        </td>
+                        <td  class="options-table">
+                            <label for="line-width">map style</label>
+                        </td>
+                    </tr>
+                  </table>
+            </div>
+
+            <div>
+                <p>Press P to play</p>
+                <p>Press S to stop</p>
+                <p>Press H to toogle UI</p>
+            </div>
+
+            <div>
+                <button>Play</button>
+                <button>Stop</button>
+            </div>
+
+        </div>
+
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+
+        <script src="static/js/select.js"></script>
+        <script src="static/js/animations.js"></script>
         <script src="static/js/paralax.js"></script>
+        <script src="static/js/imagePlacer.js"></script>
+        <script src="static/js/map.js"></script>
         <script src="static/js/fileUpload.js"></script>
 
     </body>

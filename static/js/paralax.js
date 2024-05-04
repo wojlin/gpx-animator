@@ -3,7 +3,7 @@ class Paralax
     constructor()
     {
         this.panelTemplateId = "background-level-";
-        this.levelsAmount = 9;
+        this.levelsAmount = 10;
         this.panels = [];
 
         this.screenWidth = window.innerWidth;
@@ -61,8 +61,8 @@ class Paralax
     {
         for( let i = 1; i <= this.levelsAmount; i++)
         {   
-            let moveX = x * (5/i);
-            let moveY = y * (5/i);
+            let moveX = x * (6/i);
+            let moveY = y * (6/i);
             this.panels[i-1].style.marginTop = -moveY + "%";
             this.panels[i-1].style.marginLeft = -moveX + "%";
         }
@@ -73,5 +73,5 @@ class Paralax
 var paralax = new Paralax();
 
 window.addEventListener("resize", () => {
-    window.location.reload();
+    //window.location.reload();
 });

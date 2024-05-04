@@ -18,6 +18,7 @@ class fileUpload{
         this.onDragLeave = this.onDragLeave.bind(this);
         this.onDrop = this.onDrop.bind(this);
         this.showFile = this.showFile.bind(this);
+        this.nextStage = this.nextStage.bind(this);
 
         this.button.onclick = ()=>
         {
@@ -25,36 +26,29 @@ class fileUpload{
         }
 
         this.input.addEventListener("change", this.onChange);
-
-
-        //If user Drag File Over DropArea
         this.dropArea.addEventListener("dragover", this.onDragOver);
-
-        //If user leave dragged File from DropArea
         this.dropArea.addEventListener("dragleave", this.onDragLeave);
-        
-        //If user drop File on DropArea
         this.dropArea.addEventListener("drop", this.onDrop);
 
         
         
         this.gpx = null;
         this.name = null;
-        this.photos = null;
+        this.photos = [];
 
     }
 
     onChange(event)
     {
         //getting user select file and [0] this means if user select multiple files then we'll select only the first one
-        this.file = event.srcElement.files[0];
+        this.file = event.srcElement.files;
         this.dropArea.classList.add("active");
         this.showFile(); //calling function
     }
 
     onDragOver(event)
     {
-        event.preventDefault(); //preventing from default behaviour
+        event.preventDefault();
         this.dropArea.classList.add("active");
         this.dragText.textContent = "Release to Upload File";
     }
@@ -67,9 +61,9 @@ class fileUpload{
 
     onDrop(event)
     {
-        event.preventDefault(); //preventing from default behaviour
+        event.preventDefault(); 
         //getting user select file and [0] this means if user select multiple files then we'll select only the first one
-        this.file = event.dataTransfer.files[0];
+        this.file = event.dataTransfer.files;
         console.log(this.file)
         this.showFile(); //calling function
     }
@@ -77,67 +71,109 @@ class fileUpload{
 
     showFile()
     {
-        let fileType = this.file.type; 
+        for( let i = 0; i < this.file.length; i++)
+        {
 
-        let validExtensions = ["application/gpx+xml"]; 
+        
+            if(this.currentStage == 0)
+            {
+                let fileType = this.file[i].type; 
+                let validExtensions = ["application/gpx+xml"]; 
 
-        if(validExtensions.includes(fileType)){ //if user selected file is an image file
-          let fileReader = new FileReader(); //creating new FileReader object
-          fileReader.onload = ()=>{
+                if(validExtensions.includes(fileType))
+                { 
+                    let fileReader = new FileReader();
+                    fileReader.onload = ()=>
+                    {
+                        let filename = this.file[i].name;
 
-                let filename = this.file.name; // Get the filename
+                        let fileContent = fileReader.result.substring(32);            
+                        let binaryData = atob(fileContent);
+                        let textData = new TextDecoder().decode(new Uint8Array(Array.prototype.map.call(binaryData, function (c) {
+                            return c.charCodeAt(0);
+                        })));
 
-                let fileContent = fileReader.result.substring(32);            
-                let binaryData = atob(fileContent);
-                let textData = new TextDecoder().decode(new Uint8Array(Array.prototype.map.call(binaryData, function (c) {
-                    return c.charCodeAt(0);
-                })));
+                        console.log(textData);
 
-                // Now 'textData' contains the XML data from the GPX file
-                console.log(textData);
+                        let parser = new DOMParser();
+                        let gpx = parser.parseFromString(textData, "text/xml");
+                        console.log(gpx)
 
-                var parser = new DOMParser();
-                var gpx = parser.parseFromString(textData, "text/xml");
-                console.log(gpx)
+                        let content = gpx.getElementsByTagName("gpx")[0].getElementsByTagName("trk")[0];
+                        let name = content.getElementsByTagName("name")[0].innerHTML;
+                        
+                        let points = [];
+                        let pointsRaw = content.getElementsByTagName("trkseg")[0].children;
+                        console.log(pointsRaw)
+                        for( let i = 0; i < pointsRaw.length; i++)
+                        {   
+                            let x = parseFloat(pointsRaw[i].getAttribute("lat"));
+                            let y = parseFloat(pointsRaw[i].getAttribute("lon"));
+                            let z = parseFloat(pointsRaw[i].getElementsByTagName("ele")[0].innerHTML);
+                            points.push([x,y,z]);
+                        }
+                        
+                        console.log(name)
+                        console.log(points)
+                        
+                        this.name = name;
+                        this.gpx = points;
 
-                let content = gpx.getElementsByTagName("gpx")[0].getElementsByTagName("trk")[0];
-                let name = content.getElementsByTagName("name")[0].innerHTML;
+                        document.getElementById("upload-text").innerHTML = filename;
+
+
+
+                    }
+                    fileReader.readAsDataURL(this.file[i]);
                 
-                let points = [];
-                let pointsRaw = content.getElementsByTagName("trkseg")[0].children;
-                console.log(pointsRaw)
-                for( let i = 0; i < pointsRaw.length; i++)
-                {   
-                    let x = parseFloat(pointsRaw[i].getAttribute("lat"));
-                    let y = parseFloat(pointsRaw[i].getAttribute("lon"));
-                    let z = parseFloat(pointsRaw[i].getElementsByTagName("ele")[0].innerHTML);
-                    points.push([x,y,z]);
+                
+                    this.showNextButton();
+                
+
                 }
+                else
+                {
+                    alert("This is not an GPX File!");
+                    this.dropArea.classList.remove("active");
+                    this.dragText.textContent = "Drag & Drop to Upload File";
+                }
+            }
+            else if(this.currentStage == 1)
+            {
+                let fileType = this.file[i].type; 
+                let validExtensions = ["image/jpeg", "image/png", "image/jpg"]; 
+                if(validExtensions.includes(fileType))
+                { 
+                    let fileReader = new FileReader();
+                    fileReader.onload = ()=>
+                    {
+
+                        let fileContent = fileReader.result;          
+                        
+                        this.photos.push(fileContent);
+                        
+                        document.getElementById("upload-text").innerHTML = "uploaded " + this.photos.length + " images";
+            
+
+                    }
+                    fileReader.readAsDataURL(this.file[i]);
                 
-                console.log(name)
-                console.log(points)
                 
-                this.name = name;
-                this.gpx = points;
+                    this.showNextButton();
+                
 
-                document.getElementById("upload-text").innerHTML = filename;
-
-
-
-          }
-          fileReader.readAsDataURL(this.file);
-          
-          
-          this.showNextButton();
-          
+                }
+                else
+                {
+                    alert("This is not an image File!");
+                    this.dropArea.classList.remove("active");
+                    this.dragText.textContent = "Drag & Drop to Upload File";
+                }
+            }
 
         }
-        else{
-          alert("This is not an GPX File!");
-          this.dropArea.classList.remove("active");
-          this.dragText.textContent = "Drag & Drop to Upload File";
-        }
-      }
+        
+    }
 
     showNextButton()
     {
@@ -152,57 +188,58 @@ class fileUpload{
     nextStage()
     {
         this.currentStage++;
-        this.showBox();
-        hideTitle();
-        setTimeout(function()
-        {
-            document.getElementById("upload-title").innerHTML = "add photos";
-            upload.hideNextButton();
-            document.getElementById("upload-text").innerHTML = "";
-            showTitle(["Now add photos from your trip", "(it would be great if they have loaction metadata)"])
 
-        }, 2000); 
+        if(this.currentStage == 1)
+        {    
+            this.showBox();
+            hideTitle();
+            setTimeout(function()
+            {
+                document.getElementById("upload-title").innerHTML = "add photos";
+                upload.hideNextButton();
+                document.getElementById("upload-text").innerHTML = "";
+                showTitle(["Now add photos from your trip", "(it would be great if they have loaction metadata)"])
+
+            }, 2000); 
+        }else
+        {
+            
+            hideTitle();
+            let titleBox = document.getElementById("content-box");
+            titleBox.classList.add('upload-animation');
+            setTimeout(function()
+            {
+                console.log("adding map...");
+                titleBox.remove();
+                addMap(upload.gpx);
+                var images = new imagePlacer(upload.photos);
+
+            }, 2500); 
+        }
     }
 
     showBox()
     {
+       
         let titleBox = document.getElementById("content-box");
         titleBox.classList.add('upload-animation');
+        setTimeout(function()
+        {
+            titleBox.classList.remove('upload-animation');
+
+        }, 6000); 
+        
+        
     }
 
 }
 
-
-var currentPhase = 0;
 
 var upload = new fileUpload("gpx-upload");
 
 
 
-function showTitle(text)
-{
-    let titleBox = document.getElementById("title-box");
-    titleBox.classList.add('fade-in');
-    titleBox.classList.remove('fade-out');
 
-    let content = "";
-    for(let i = 0; i < text.length; i++)
-    {
-        content += "<p>" + text[i] + "</p>";
-    }
-
-    titleBox.innerHTML = content;
-    
-}
-
-function hideTitle()
-{
-    let titleBox = document.getElementById("title-box");
-    titleBox.classList.add('fade-out');
-    titleBox.classList.remove('fade-in');
-}
-
-showTitle(["Welcome to GPX animator!", "First step is to upload a GPX file of your trip"])
 
 
 
