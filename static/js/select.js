@@ -122,7 +122,7 @@ class Select{
 
         for(let i = 0; i < this.select.options.length; i++)
         {
-            if(this.select.options[i].innerHTML == src)
+            if(this.select.options[i].innerHTML == src || this.select.options[i].innerHTML == name)
             {
 
                 this.select.selectedIndex = i;

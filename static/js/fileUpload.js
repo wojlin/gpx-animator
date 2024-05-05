@@ -215,9 +215,8 @@ class fileUpload{
                 
                 setTimeout( function() 
                 { 
-                    mapObject.zoomTo(upload.gpx[0][0], upload.gpx[0][1], 14);
                     mapObject.applyOptionsToMap(); 
-                }, 2000);
+                }, 3000);
 
                 var images = new imagePlacer(upload.photos);
 

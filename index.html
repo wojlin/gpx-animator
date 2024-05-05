@@ -79,7 +79,7 @@
                     </tr>
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="range" id="line-width" name="line-width" minvalue="0" maxvalue="10" value="5" />
+                            <input type="range" id="line-width" name="line-width" min="0" max="10" value="5" />
                         </td>
                         <td  class="options-table">
                             <label for="line-width">line width</label>
@@ -87,7 +87,7 @@
                     </tr>
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="range" id="line-opacity" name="line-opacity" minvalue="0" maxvalue="100" value="90" />
+                            <input type="range" id="line-opacity" name="line-opacity" min="0" max="100" value="90" />
                         </td>
                         <td  class="options-table">
                             <label for="line-opacity">line opacity</label>
@@ -117,7 +117,7 @@
                     </tr>
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="range" id="glow-width" name="glow-width" minvalue="0" maxvalue="100" value="50" />
+                            <input type="range" id="glow-width" name="glow-width" min="0" max="100" value="50" />
                         </td>
                         <td  class="options-table">
                             <label for="glow-width">glow width</label>
@@ -125,7 +125,7 @@
                     </tr>
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="range" id="glow-opacity" name="glow-opacity" minvalue="0" maxvalue="100" value="90" />
+                            <input type="range" id="glow-opacity" name="glow-opacity" min="0" max="100" value="90" />
                         </td>
                         <td  class="options-table">
                             <label for="glow-opacity">glow opacity</label>
@@ -155,7 +155,7 @@
 
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="range" id="marker-size" name="marker-size" minvalue="0" maxvalue="100" value="90" />
+                            <input type="range" id="marker-size" name="marker-size" min="0" max="100" value="90" />
                         </td>
                         <td  class="options-table">
                             <label for="marker-size">marker size</label>
@@ -182,26 +182,8 @@
                         </td>
                     </tr>
 
-                    <tr class="options-table-row-hr"><td  class="options-table-hr">Other Options</td><td  class="options-table"></td></tr>
-
-                    <tr class="options-table-row-hr"><td  class="options-table-hr">Map Options</td><td  class="options-table"></td></tr>
-
-                    <tr class="options-table-row">
-                        <td  class="options-table">
-                            <input type="range" id="nimation-speed" name="nimation-speed" minvalue="0" maxvalue="100" value="50" />
-                        </td>
-                        <td  class="options-table">
-                            <label for="animation-speed">animation speed</label>
-                        </td>
-                    </tr>
-                    <tr class="options-table-row">
-                        <td  class="options-table">
-                            <input type="range" id="zoom-level" name="zoom-level" minvalue="0" maxvalue="100" value="50" />
-                        </td>
-                        <td  class="options-table">
-                            <label for="zoom-level">zoom level</label>
-                        </td>
-                    </tr>
+                    <tr class="options-table-row-hr"><td  class="options-table-hr">UI Options</td><td  class="options-table"></td></tr>
+                    
                     <tr class="options-table-row">
                         <td  class="options-table">
                             <input type="checkbox" id="show-title" name="show-title" />
@@ -210,6 +192,7 @@
                             <label for="show-title">show gpx title</label>
                         </td>
                     </tr>
+
                     <tr class="options-table-row">
                         <td  class="options-table">
                             <input type="checkbox" id="show-distance" name="show-distance" />
@@ -218,6 +201,7 @@
                             <label for="show-distance">show distance</label>
                         </td>
                     </tr>
+
                     <tr class="options-table-row">
                         <td  class="options-table">
                             <input type="checkbox" id="show-elevation" name="show-elevation" />
@@ -226,6 +210,20 @@
                             <label for="show-elevation">show elevation</label>
                         </td>
                     </tr>
+
+
+
+                    <tr class="options-table-row-hr"><td  class="options-table-hr">Map Options</td><td  class="options-table"></td></tr>
+                    
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="range" id="zoom-level" name="zoom-level" min="7" max="17" value="14" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="zoom-level">zoom level</label>
+                        </td>
+                    </tr>
+
                     <tr class="options-table-row">
                         <td  class="options-table">
                             <input type="checkbox" id="enable-elevation" name="enable-elevation" />
@@ -234,6 +232,51 @@
                             <label for="enable-elevation">enable elevation</label>
                         </td>
                     </tr>
+
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="range" id="elevation-factor" name="elevation-factor" min="0" max="200" value="100" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="elevation-factor">elevation factor</label>
+                        </td>
+                    </tr>
+
+                    <tr class="options-table-row">
+                        <td class="options-table" id="map-select-placeholder">
+                            <select id="map-select">
+                                <option data-name="hybrid" data-src="static/images/maps/satellite.png">hybrid</option>
+                                <option data-name="satellite" data-src="static/images/maps/satellite.png">satellite</option>
+                                <option data-name="outdoor" data-src="static/images/maps/outdoor.png">outdoor</option>
+                                <option data-name="backdrop" data-src="static/images/maps/backdrop.png">backdrop</option>
+                                <option data-name="winter" data-src="static/images/maps/winter.png">winter</option>
+                                <option data-name="topo" data-src="static/images/maps/topo.png">topo</option>
+                                <option data-name="landscape" data-src="static/images/maps/landscape.png">landscape</option>
+                                <option data-name="ocean" data-src="static/images/maps/ocean.png">ocean</option>
+                                <option data-name="toner" data-src="static/images/maps/toner.png">toner</option>
+                                <option data-name="osm" data-src="static/images/maps/osm.png">osm</option>
+                                <option data-name="streets" data-src="static/images/maps/streets.png">streets</option>
+                                <option data-name="dataviz" data-src="static/images/maps/dataviz.png">dataviz</option>
+                                <option data-name="basic" data-src="static/images/maps/basic.png">basic</option>
+                                <option data-name="bright" data-src="static/images/maps/bright.png">bright</option>
+                              </select>
+                        </td>
+                        <td  class="options-table">
+                            <label for="map-select">map style</label>
+                        </td>
+                    </tr>
+
+                    <tr class="options-table-row-hr"><td  class="options-table-hr">Other Options</td><td  class="options-table"></td></tr>
+                    
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="range" id="animation-speed" name="animation-speed" minvalue="0" maxvalue="100" value="50" />
+                        </td>
+                        <td  class="options-table">
+                            <label for="animation-speed">animation speed</label>
+                        </td>
+                    </tr>
+                    
                     <tr class="options-table-row">
                         <td  class="options-table">
                             <input type="checkbox" id="rotate-camera" name="rotate-camera" />
@@ -242,6 +285,11 @@
                             <label for="rotate-camera">rotate camera</label>
                         </td>
                     </tr>
+                    
+                    
+                    
+                    
+                    
                     <tr class="options-table-row">
                         <td  class="options-table">
                             <input type="checkbox" id="display-photos" name="display-photos" />
@@ -277,22 +325,7 @@
                             <label for="display-select">display type</label>
                         </td>
                     </tr>
-                    <tr class="options-table-row">
-                        <td class="options-table" id="map-select-placeholder">
-                            <select id="map-select">
-                                <option data-name="hybrid" data-src="static/images/icons/1.svg"></option>
-                                <option data-name="satellite" data-src="static/images/icons/0.svg"></option>
-                                <option data-name="outdoors" data-src="static/images/icons/1.svg"></option>
-                                <option data-name="pastel" data-src="static/images/icons/1.svg"></option>
-                                <option data-name="winter" data-src="static/images/icons/1.svg"></option>
-                                <option data-name="dark" data-src="static/images/icons/1.svg"></option>
-                                <option data-name="light" data-src="static/images/icons/1.svg"></option>
-                              </select>
-                        </td>
-                        <td  class="options-table">
-                            <label for="map-select">map style</label>
-                        </td>
-                    </tr>
+                    
                   </table>
             </div>
 
@@ -308,6 +341,10 @@
             </div>
 
         </div>
+
+        <div id="title-widget"></div>
+
+        <div id="distance-widget"></div>
 
         <div id="map-container">
             <div id="map"></div>

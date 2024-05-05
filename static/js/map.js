@@ -6,9 +6,13 @@ class MapClass
         this.display = false;
         this.points = [];
 
+        this.optionsDict = null;
+        this.lastStyle = "";
+
         this.trackExist = false;
         this.glowExist = false;
         this.markerExist = false;
+        this.elevationEnabled = false;
     }
 
     addMap(points)
@@ -38,7 +42,7 @@ class MapClass
         this.map.flyTo({
             zoom: zoom,
             center: [lat,lon],
-            essential: true 
+            essential: false 
         });
         
     }
@@ -67,6 +71,21 @@ class MapClass
         let endMarker = new maptilersdk.Marker()
         .setLngLat(this.endingPoint)
         .addTo(this.map);
+    }
+
+    enableElevation(state, elevationFactor)
+    {   
+        let factor = parseFloat(elevationFactor) / 100.0;
+        if(state == false) 
+        {
+            console.log("disable")
+            mapObject.map.disableTerrain();
+        } 
+        else 
+        {
+            console.log("enable", factor)
+            mapObject.map.enableTerrain(factor);
+        }
     }
 
 
@@ -146,7 +165,7 @@ class MapClass
                     'paint': 
                     {
                         'line-color': color,
-                        'line-width': parseFloat(width / 4),
+                        'line-width': parseFloat(width),
                         'line-opacity': parseFloat(opacity / 100),
                         
                     }
@@ -182,9 +201,9 @@ class MapClass
                     'paint': 
                     {
                         'line-color': color,
-                        'line-width': parseFloat(width / 2),
+                        'line-width': parseFloat(width),
                         'line-opacity': parseFloat(opacity / 100),
-                        'line-blur': parseFloat(width / 3),
+                        'line-blur': parseFloat(width / 2),
                     }
             }); 
     }
@@ -196,6 +215,7 @@ class MapClass
     {
         let optionsList = options.getOptions();
         console.log(optionsList);
+        
 
         let optionsDict = {};
         for(let i = 0; i < optionsList.length; i++)
@@ -203,85 +223,197 @@ class MapClass
             optionsDict[optionsList[i].id] = optionsList[i];
         }
 
+        this.optionsDict = optionsDict;
 
+        mapObject.zoomTo(mapObject.points[0][0], mapObject.points[0][1], optionsDict["zoom-level"].value)
 
-        if(optionsDict["display-glow"].checked)
+        let mapStyle = optionsDict["map-select"].options[optionsDict["map-select"].selectedIndex ].value;
+
+        console.log(mapStyle)
+
+        if(mapStyle != this.lastStyle)
         {
-            console.log("displaying glow");
-            if(this.glowExist)
+            if(mapStyle == "hybrid")
             {
-                this.map.removeLayer("glow");
-                this.map.removeSource("glow");
+                mapObject.map.setStyle(maptilersdk.MapStyle.HYBRID);
             }
-            
-            this.addGlow( optionsDict["glow-color"].value, optionsDict["glow-width"].value, optionsDict["glow-opacity"].value);
-            this.glowExist = true;
-        }else
-        {
-            console.log("hiding glow");
-            if(this.glowExist)
+            else if (mapStyle == "satellite")
             {
-                this.map.removeLayer("glow");
-                this.map.removeSource("glow");
+                mapObject.map.setStyle(maptilersdk.MapStyle.SATELLITE);
             }
-            
+            else if (mapStyle == "outdoor")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.OUTDOOR);
+            }
+            else if (mapStyle == "backdrop")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.BACKDROP);
+            }
+            else if (mapStyle == "winter")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.WINTER);
+            }
+            else if (mapStyle == "topo")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.TOPO);
+            }
+            else if (mapStyle == "landscape")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.LANDSCAPE);
+            }
+            else if (mapStyle == "ocean")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.OCEAN);
+            }
+            else if (mapStyle == "toner")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.TONER);
+            }
+            else if (mapStyle == "osm")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.OPENSTREETMAP);
+            }
+            else if (mapStyle == "streets")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.STREETS);
+            }
+            else if (mapStyle == "dataviz")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.DATAVIZ);
+            }
+            else if (mapStyle == "basic")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.BASIC);
+            }
+            else if (mapStyle == "bright")
+            {
+                mapObject.map.setStyle(maptilersdk.MapStyle.BRIGHT);
+            }
+            else
+            {
+                console.error("missing map style!");
+            }
             this.glowExist = false;
-        }
-
-        
-        if(optionsDict["display-line"].checked)
-        {
-            console.log("displaying line");
-            if(this.trackExist)
-            {
-                this.map.removeLayer("track");
-                this.map.removeSource("track");
-            }
-            
-            this.addTrack(optionsDict["line-color"].value, optionsDict["line-width"].value, optionsDict["line-opacity"].value);
-            this.trackExist = true;
-        }else
-        {
-            console.log("hiding line");
-            if(this.trackExist)
-            {
-                this.map.removeLayer("track");
-                this.map.removeSource("track");
-            }
-            
             this.trackExist = false;
+            this.lastStyle = mapStyle;
         }
+        
+        setTimeout( function() 
+        { 
+            console.log('loading all datasets');
 
-
-        if(optionsDict["display-marker"].checked)
-        {
-            console.log("displaying marker");
-            if(this.markerExist)
+            if(mapObject.optionsDict["display-glow"].checked)
             {
-                document.getElementById("marker").remove();
-            }
-            
-            let size = optionsDict["marker-size"].value;
-            let url = optionsDict["icon-select"].options[optionsDict["icon-select"].selectedIndex ].value 
-            let color = optionsDict["marker-color"].value
-            this.addMarker(color, size, url);
-            this.markerExist = true;
-        }else
-        {
-            console.log("hiding marker");
-            if(this.markerExist)
+                console.log("displaying glow");
+
+ 
+                if (!(!mapObject.map.getLayer("glow"))) 
+                {
+                    mapObject.map.removeLayer("glow");
+                    mapObject.map.removeSource("glow");
+                }
+                
+                let color = mapObject.optionsDict["glow-color"].value;
+                let width = parseFloat(mapObject.optionsDict["glow-width"].value);
+                let opacity = parseFloat(mapObject.optionsDict["glow-opacity"].value);
+                console.log('glow', color, width, opacity);
+                mapObject.addGlow(color, width, opacity);
+                mapObject.glowExist = true;
+
+         
+            }else
             {
-                document.getElementById("marker").remove();
+                console.log("hiding glow");
+                if (!(!mapObject.map.getLayer("glow"))) 
+                {
+                    mapObject.map.removeLayer("glow");
+                    mapObject.map.removeSource("glow");
+                }
+                
+                mapObject.glowExist = false;
             }
+
             
-            this.markerExist = false;
-        }
+            if(mapObject.optionsDict["display-line"].checked)
+            {
+                console.log("displaying line");
+                if (!(!mapObject.map.getLayer("track"))) 
+                {
+                    mapObject.map.removeLayer("track");
+                    mapObject.map.removeSource("track");
+                }
+                
+                let color = mapObject.optionsDict["line-color"].value;
+                let width = parseFloat(mapObject.optionsDict["line-width"].value);
+                let opacity = parseFloat(mapObject.optionsDict["line-opacity"].value);
+                console.log('track', color, width, opacity);
+                mapObject.addTrack(color, width, opacity);
+                mapObject.trackExist = true;
+            }else
+            {
+                console.log("hiding line");
+                if (!(!mapObject.map.getLayer("track"))) 
+                {
+                    mapObject.map.removeLayer("track");
+                    mapObject.map.removeSource("track");
+                }
+                
+                mapObject.trackExist = false;
+            }
 
 
+            if(mapObject.optionsDict["display-marker"].checked)
+            {
+                console.log("displaying marker");
+                if(mapObject.markerExist)
+                {
+                    document.getElementById("marker").remove();
+                }
+                
+                let size = mapObject.optionsDict["marker-size"].value;
+                let url = mapObject.optionsDict["icon-select"].options[mapObject.optionsDict["icon-select"].selectedIndex ].value 
+                let color = mapObject.optionsDict["marker-color"].value
+                mapObject.addMarker(color, size, url);
+                mapObject.markerExist = true;
+            }else
+            {
+                console.log("hiding marker");
+                if(mapObject.markerExist)
+                {
+                    document.getElementById("marker").remove();
+                }
+                
+                mapObject.markerExist = false;
+            }
+
+
+
+            if(mapObject.optionsDict["enable-elevation"].checked)
+            {
+                console.log("enabling elevation");
+                mapObject.enableElevation(mapObject.optionsDict["enable-elevation"].checked, mapObject.optionsDict["elevation-factor"].value);
+                mapObject.elevationEnabled = true;
+            }
+            else
+            {
+                console.log("hiding elevation");
+                mapObject.enableElevation(mapObject.optionsDict["enable-elevation"].checked, mapObject.optionsDict["elevation-factor"].value);
+                mapObject.elevationEnabled = false;
+            }
+
+        },
+         500);
+
+            
        
 
+        
 
-    
+        
+       
+        
+        
+        
      
     }
 
