@@ -329,27 +329,34 @@
                   </table>
             </div>
 
-            <div>
-                <p>Press P to play</p>
-                <p>Press S to stop</p>
-                <p>Press H to toogle UI</p>
+            <div id="panel-line"></div>
+
+            <div id="help-panel">
+                <ul>
+                    <li>Press P to play</li>
+                    <li>Press S to stop</li>
+                    <li>Press H to toogle UI</li>
+                </ul>
             </div>
 
-            <div>
-                <button>Play</button>
-                <button>Stop</button>
+            <div id="buttons-panel">
+                <button id="play-button">Play</button>
+                <button id="pause-button">Pause</button>
             </div>
 
         </div>
 
         <div id="title-widget"></div>
 
-        <div id="distance-widget"></div>
+        <div id="elevation-widget">
+            <canvas id="elevationChart" width="400" height="400"></canvas>
+        </div>
 
         <div id="map-container">
             <div id="map"></div>
         </div>
 
+        <script src="static/js/track.js"></script>
         <script src="static/js/options.js"></script>
         <script src="static/js/select.js"></script>
         <script src="static/js/animations.js"></script>

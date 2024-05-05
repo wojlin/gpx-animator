@@ -116,6 +116,10 @@ class fileUpload{
                         console.log(name)
                         console.log(points)
                         
+                        let track = new Track(points);
+                        points = track.points;
+                        console.log(points)
+                        
                         this.name = name;
                         this.gpx = points;
 
@@ -216,6 +220,7 @@ class fileUpload{
                 setTimeout( function() 
                 { 
                     mapObject.applyOptionsToMap(); 
+                    var animation = new TrackAnimation(this.points);
                 }, 3000);
 
                 var images = new imagePlacer(upload.photos);

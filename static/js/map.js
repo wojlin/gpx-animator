@@ -89,7 +89,7 @@ class MapClass
     }
 
 
-    addMarker(markerColor, markerSize, markerURL)
+    addMarker(markerColor, markerSize, markerURL, showDistance)
     {
         let startingPoint = this.points[0];
 
@@ -105,7 +105,7 @@ class MapClass
                     },
                     'geometry': {
                         'type': 'Point',
-                        'coordinates': startingPoint
+                        'coordinates': [startingPoint[0],startingPoint[1], startingPoint[2]]
                     }
                 }
             ]
@@ -115,6 +115,9 @@ class MapClass
         geojson.features.forEach(function (marker) 
         {
 
+            let container = document.createElement('div');
+            container.id = "marker-container-root";
+
             let el = document.createElement('div');
             el.className = 'marker-container';
             el.id = "marker";
@@ -122,16 +125,29 @@ class MapClass
             el.style.width = marker.properties.iconSize[0] + 'px';
             el.style.height = marker.properties.iconSize[1] + 'px';
 
+            
+            
+
             let colorOverlay = document.createElement('div');
             colorOverlay.classList.add('marker-color-overlay');
             colorOverlay.style.backgroundColor = markerColor; 
 
             el.appendChild(colorOverlay);
-    
+            container.appendChild(el)
 
-            new maptilersdk.Marker({element: el})
+            if(showDistance)
+            {
+                let distance = document.createElement('div');
+                distance.id = "show-distance-text";
+                distance.innerHTML = "0 KM";
+                container.appendChild(distance);
+            }
+
+            new maptilersdk.Marker({element: container})
                 .setLngLat(marker.geometry.coordinates)
                 .addTo(mapObject.map);
+
+            
         });
 
 
@@ -367,20 +383,21 @@ class MapClass
                 console.log("displaying marker");
                 if(mapObject.markerExist)
                 {
-                    document.getElementById("marker").remove();
+                    document.getElementById("marker-container-root").remove();
                 }
                 
                 let size = mapObject.optionsDict["marker-size"].value;
                 let url = mapObject.optionsDict["icon-select"].options[mapObject.optionsDict["icon-select"].selectedIndex ].value 
                 let color = mapObject.optionsDict["marker-color"].value
-                mapObject.addMarker(color, size, url);
+                let showDistance = mapObject.optionsDict["show-distance"].checked;
+                mapObject.addMarker(color, size, url, showDistance);
                 mapObject.markerExist = true;
             }else
             {
                 console.log("hiding marker");
                 if(mapObject.markerExist)
                 {
-                    document.getElementById("marker").remove();
+                    document.getElementById("marker-container-root").remove();
                 }
                 
                 mapObject.markerExist = false;
@@ -404,8 +421,15 @@ class MapClass
         },
          500);
 
-            
-       
+        
+        if(mapObject.optionsDict["show-title"].checked)
+        {
+            document.getElementById("title-widget").innerHTML = upload.name;
+        }
+        else
+        {
+            document.getElementById("title-widget").innerHTML = "";
+        }
 
         
 
@@ -422,7 +446,4 @@ class MapClass
 
 
 var mapObject = new MapClass();
-
-
-
 

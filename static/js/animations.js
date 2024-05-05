@@ -1,3 +1,90 @@
+class TrackAnimation
+{
+    constructor(points)
+    {
+        this.speedFactor = 30; 
+        this.animation; 
+        this.startTime = 0;
+        this.progress = 0; 
+        this.resetTime = false; 
+        this.pauseButton = document.getElementById('pause-button');
+        this.playButton = document.getElementById('play-button');
+        this.points = points;
+
+        this.geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': points
+                    }
+                }
+            ]
+        };
+        
+
+        this.playButton.addEventListener('click', function () 
+        {
+            this.resetTime = true;
+            animateLine();   
+        });
+
+        this.pauseButton.addEventListener('click', function () 
+        {
+                cancelAnimationFrame(animation);        
+        });
+
+
+        
+    }
+
+    startAnimation()
+    {
+        this.startTime = performance.now();
+        this.animateLine();
+    }
+
+
+    animateLine(timestamp) 
+    {
+        if (this.resetTime) 
+        {
+            this.startTime = performance.now() - this.progress;
+            this.resetTime = false;
+        } 
+        else 
+        {
+            this.progress = timestamp - this.startTime;
+        }
+
+        if (this.progress > this.speedFactor * 360) 
+        {
+            this.startTime = timestamp;
+            geojson.features[0].geometry.coordinates = [];
+        } 
+        else 
+        {
+            let current = this.progress / (this.speedFactor * 360);
+
+            console.log(current);
+
+            //geojson.features[0].geometry.coordinates.push([0, 0]);
+
+            //mapObject.map.getSource('glow').setData(geojson);
+            //mapObject.map.getSource('track').setData(geojson);
+            
+        }
+        // Request the next frame of the animation.
+        animation = requestAnimationFrame(animateLine);
+    }
+
+}
+
+
+
+
 function showTitle(text)
 {
     let titleBox = document.getElementById("title-box");
