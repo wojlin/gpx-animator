@@ -1,6 +1,7 @@
 class Select{
 	constructor(id, placeholder)
     {
+        console.log("adding:", id, placeholder)
         this.currentSrc = "";
         this.currentName = "";
 
@@ -119,9 +120,31 @@ class Select{
         document.getElementById(this.id+"-title-img").src = src;
         document.getElementById(this.id+"-title-span").innerHTML = name;
 
+        for(let i = 0; i < this.select.options.length; i++)
+        {
+            if(this.select.options[i].innerHTML == src)
+            {
+
+                this.select.selectedIndex = i;
+            }
+        }
+
+        console.log(this.select.options[this.select.selectedIndex ].value)
+        
+
         console.log(this.getCurrentOption());
 
         this.toogleSelect();
+
+        if (!mapObject.display) 
+        {
+            console.log("map does not exist yet");
+        }
+        else
+        {
+            console.log("applying options to map");
+            mapObject.applyOptionsToMap();
+        }
     }
 
     getCurrentOption()
@@ -131,4 +154,5 @@ class Select{
 }
 
 var iconSelect = new Select("icon-select", "icon-select-placeholder");
-var modeSelect = new Select("mode-select", "mode-select-placeholder");
+var mapSelect = new Select("map-select", "map-select-placeholder");
+var displaySelect =new Select("display-select", "display-select-placeholder");

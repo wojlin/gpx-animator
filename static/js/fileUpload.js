@@ -211,7 +211,14 @@ class fileUpload{
             {
                 console.log("adding map...");
                 titleBox.remove();
-                addMap(upload.gpx);
+                mapObject.addMap(upload.gpx);
+                
+                setTimeout( function() 
+                { 
+                    mapObject.zoomTo(upload.gpx[0][0], upload.gpx[0][1], 14);
+                    mapObject.applyOptionsToMap(); 
+                }, 2000);
+
                 var images = new imagePlacer(upload.photos);
 
             }, 2500); 

@@ -3,7 +3,6 @@ class imagePlacer{
     {
         this.photos = photos;
         this.imagesPanel = document.getElementById("image-tab-content");
-        console.log(this.photos)
         this.placeImages();
     }
 
@@ -13,7 +12,7 @@ class imagePlacer{
         {
             let imageBox = document.createElement("div");
             imageBox.classList.add("images-box");
-            
+
             let image = document.createElement("img");
             image.src = this.photos[i];
             image.classList.add("images-img")
