@@ -691,10 +691,9 @@ body
 
 #buttons-panel > button
 {
-  width:45%;
+  width:30%;
   margin:auto;
   display: inline;
-  float: right;
   color:white;
   background: black;
   border: solid 0.2vh rgb(255, 255, 255);
@@ -713,7 +712,12 @@ body
 
 #buttons-panel > :first-child 
 {
-  float:left !important;
+
+}
+
+#restart-button
+{
+
 }
 
 #elevation-widget {

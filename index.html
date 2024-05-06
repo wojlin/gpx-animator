@@ -271,7 +271,7 @@
                     
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="range" id="animation-speed" name="animation-speed" minvalue="0" maxvalue="100" value="50" />
+                            <input type="range" id="animation-speed" name="animation-speed" min="100" max="1000" value="100" />
                         </td>
                         <td  class="options-table">
                             <label for="animation-speed">animation speed</label>
@@ -343,6 +343,7 @@
             <div id="buttons-panel">
                 <button onclick="trackAnimation.play();" id="play-button">Play</button>
                 <button onclick="trackAnimation.pause();" id="pause-button">Pause</button>
+                <button onclick="trackAnimation.restart();" id="restart-button">Restart</button>
             </div>
 
         </div>

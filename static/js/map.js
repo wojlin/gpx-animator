@@ -12,6 +12,7 @@ class MapClass
         this.trackExist = false;
         this.glowExist = false;
         this.markerExist = false;
+        this.showDistance = false;
         this.elevationEnabled = false;
 
         this.marker;
@@ -45,6 +46,15 @@ class MapClass
             zoom: zoom,
             center: [lat,lon],
             essential: false 
+        });
+        
+    }
+
+    flyTo(lat, lon)
+    {
+        this.map.flyTo({
+            center: [lat,lon],
+            essential: true
         });
         
     }
@@ -285,6 +295,9 @@ class MapClass
 
         this.optionsDict = optionsDict;
 
+        trackAnimation.restart();
+        trackAnimation.speedFactor = 1100 - optionsDict["animation-speed"].value;
+
         mapObject.zoomTo(mapObject.points[0][0], mapObject.points[0][1], optionsDict["zoom-level"].value)
 
         let mapStyle = optionsDict["map-select"].options[optionsDict["map-select"].selectedIndex ].value;
@@ -481,10 +494,12 @@ class MapClass
         {
             document.getElementById('elevation-widget').style.display = "block";
             elevationWidget.calculate(this.points);
+            this.showDistance = true;
         }
         else
         {
             document.getElementById('elevation-widget').style.display = "none";
+            this.showDistance = false;
         }
        
         
