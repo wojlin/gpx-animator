@@ -215,12 +215,17 @@ class fileUpload{
             {
                 console.log("adding map...");
                 titleBox.remove();
+
+
                 mapObject.addMap(upload.gpx);
+
+                document.getElementById("image-tab").style.display = "block";
+                document.getElementById("options-tab").style.display = "block";
                 
                 setTimeout( function() 
                 { 
                     mapObject.applyOptionsToMap(); 
-                    trackAnimation.updatePoints(this.points);
+                    trackAnimation.updatePoints(upload.gpx);
                 }, 3000);
 
                 var images = new imagePlacer(upload.photos);

@@ -13,6 +13,8 @@ class MapClass
         this.glowExist = false;
         this.markerExist = false;
         this.elevationEnabled = false;
+
+        this.marker;
     }
 
     addMap(points)
@@ -143,7 +145,7 @@ class MapClass
                 container.appendChild(distance);
             }
 
-            new maptilersdk.Marker({element: container})
+            mapObject.marker = new maptilersdk.Marker({element: container})
                 .setLngLat(marker.geometry.coordinates)
                 .addTo(mapObject.map);
 
@@ -224,7 +226,49 @@ class MapClass
             }); 
     }
 
+    interpolatePoints(track, position) 
+    {
+        if (position <= 0) return track[0]; // If position is at or before the start of the track
+        if (position >= 1) return track[track.length - 1]; // If position is at or after the end of the track
 
+        var cumulativeDistances = [0]; // Array to store cumulative distances
+        var totalDistance = 0;
+
+        // Calculate cumulative distances
+        for (var i = 1; i < track.length; i++) {
+            var prevPoint = track[i - 1];
+            var point = track[i];
+            var distance = Math.sqrt(Math.pow(point[0] - prevPoint[0], 2) + Math.pow(point[1] - prevPoint[1], 2));
+            totalDistance += distance;
+            cumulativeDistances.push(totalDistance);
+        }
+
+        var targetDistance = totalDistance * position;
+
+        // Find the segment where the target distance falls
+        for (var i = 0; i < cumulativeDistances.length - 1; i++) {
+            if (cumulativeDistances[i] <= targetDistance && targetDistance <= cumulativeDistances[i + 1]) {
+                if (cumulativeDistances[i] === targetDistance) {
+                    return track[i];
+                } else if (cumulativeDistances[i + 1] === targetDistance) {
+                    return track[i + 1];
+                } else {
+                    var ratio = (targetDistance - cumulativeDistances[i]) / (cumulativeDistances[i + 1] - cumulativeDistances[i]);
+                    var prevPoint = track[i];
+                    var point = track[i + 1];
+                    var interpolatedPoint = [];
+                    for (var j = 0; j < prevPoint.length; j++) {
+                        interpolatedPoint.push(prevPoint[j] + (point[j] - prevPoint[j]) * ratio);
+                    }
+                    return interpolatedPoint;
+                }
+            }
+        }
+
+        // This shouldn't happen if the input data is correct
+        return null;
+    }
+    
     
 
     applyOptionsToMap()
@@ -435,12 +479,12 @@ class MapClass
 
         if(mapObject.optionsDict["show-elevation"].checked)
         {
-            document.getElementById('elevation-widget').style.display = "true";
+            document.getElementById('elevation-widget').style.display = "block";
             elevationWidget.calculate(this.points);
         }
         else
         {
-            document.getElementById('elevation-widget').style.display = "false";
+            document.getElementById('elevation-widget').style.display = "none";
         }
        
         

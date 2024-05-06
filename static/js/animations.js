@@ -2,7 +2,7 @@ class TrackAnimation
 {
     constructor(points)
     {
-        this.speedFactor = 30; 
+        this.speedFactor = 200; 
         this.animation; 
         this.startTime = 0;
         this.progress = 0; 
@@ -11,6 +11,8 @@ class TrackAnimation
         this.playButton = document.getElementById('play-button');
         this.points = points;
 
+        this.current = 0;
+
         this.geojson = {
             'type': 'FeatureCollection',
             'features': [
@@ -18,7 +20,7 @@ class TrackAnimation
                     'type': 'Feature',
                     'geometry': {
                         'type': 'LineString',
-                        'coordinates': points
+                        'coordinates': []
                     }
                 }
             ]
@@ -40,7 +42,7 @@ class TrackAnimation
                     'type': 'Feature',
                     'geometry': {
                         'type': 'LineString',
-                        'coordinates': this.points
+                        'coordinates': []
                     }
                 }
             ]
@@ -50,6 +52,8 @@ class TrackAnimation
     play()
     {
         this.resetTime = true;
+        elevationWidget.currentIndex = 0;
+        elevationWidget.data = [];
         this.animateLine();  
     }
 
@@ -82,17 +86,47 @@ class TrackAnimation
         {
             this.startTime = timestamp;
             this.geojson.features[0].geometry.coordinates = [];
+            elevationWidget.currentIndex = 0;
+            elevationWidget.data = [];
+            
         } 
         else 
         {
-            let current = this.progress / (this.speedFactor * 360);
+            this.current = this.progress / (this.speedFactor * 360);
+            console.log(this.current)
+ 
+            let point = mapObject.interpolatePoints(this.points, this.current);
+            
+            
 
-            console.log(current);
+            this.geojson.features[0].geometry.coordinates.push([point[0], point[1], point[2]]);
 
-            //geojson.features[0].geometry.coordinates.push([0, 0]);
+            elevationWidget.currentIndex++;
 
-            //mapObject.map.getSource('glow').setData(geojson);
-            //mapObject.map.getSource('track').setData(geojson);
+            elevationWidget.data = [];
+
+            let iFound = 0;
+
+            for(let i  = 0; i < this.points.length; i ++)
+            {   
+                elevationWidget.data.push(null);
+                if(point[3] < this.points[i][3])
+                {
+                    break;
+                }
+            }
+
+        
+
+            elevationWidget.data[elevationWidget.data.length - 1] = point[2];
+
+    
+            elevationWidget.update();
+
+            mapObject.marker.setLngLat([point[0], point[1]]);
+            document.getElementById("show-distance-text").innerHTML =  parseFloat(point[3]).toFixed(1).toString() + " KM";
+            mapObject.map.getSource('glow').setData(this.geojson);
+            mapObject.map.getSource('track').setData(this.geojson);
             
         }
         // Request the next frame of the animation.
