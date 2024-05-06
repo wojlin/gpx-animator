@@ -433,7 +433,15 @@ class MapClass
 
         
 
-        
+        if(mapObject.optionsDict["show-elevation"].checked)
+        {
+            document.getElementById('elevation-widget').style.display = "true";
+            elevationWidget.calculate(this.points);
+        }
+        else
+        {
+            document.getElementById('elevation-widget').style.display = "false";
+        }
        
         
         

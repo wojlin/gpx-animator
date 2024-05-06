@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>  
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.min.js"></script>
         <link href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet" />
         <link href="static/css/style.css" rel="stylesheet" />
@@ -340,8 +341,8 @@
             </div>
 
             <div id="buttons-panel">
-                <button id="play-button">Play</button>
-                <button id="pause-button">Pause</button>
+                <button onclick="trackAnimation.play();" id="play-button">Play</button>
+                <button onclick="trackAnimation.play();" id="pause-button">Pause</button>
             </div>
 
         </div>
@@ -356,6 +357,7 @@
             <div id="map"></div>
         </div>
 
+        <script src="static/js/elevation.js"></script>
         <script src="static/js/track.js"></script>
         <script src="static/js/options.js"></script>
         <script src="static/js/select.js"></script>

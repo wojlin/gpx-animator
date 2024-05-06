@@ -220,7 +220,7 @@ class fileUpload{
                 setTimeout( function() 
                 { 
                     mapObject.applyOptionsToMap(); 
-                    var animation = new TrackAnimation(this.points);
+                    trackAnimation.updatePoints(this.points);
                 }, 3000);
 
                 var images = new imagePlacer(upload.photos);

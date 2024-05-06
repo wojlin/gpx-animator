@@ -24,21 +24,40 @@ class TrackAnimation
             ]
         };
         
-
-        this.playButton.addEventListener('click', function () 
-        {
-            this.resetTime = true;
-            animateLine();   
-        });
-
-        this.pauseButton.addEventListener('click', function () 
-        {
-                cancelAnimationFrame(animation);        
-        });
+        this.animateLine = this.animateLine.bind(this);
 
 
         
     }
+
+    updatePoints(points)
+    {
+        this.points = points;
+        this.geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': this.points
+                    }
+                }
+            ]
+        };
+    }
+
+    play()
+    {
+        this.resetTime = true;
+        this.animateLine();  
+    }
+
+    pause()
+    {
+        cancelAnimationFrame(this.animation);
+    }
+
 
     startAnimation()
     {
@@ -62,7 +81,7 @@ class TrackAnimation
         if (this.progress > this.speedFactor * 360) 
         {
             this.startTime = timestamp;
-            geojson.features[0].geometry.coordinates = [];
+            this.geojson.features[0].geometry.coordinates = [];
         } 
         else 
         {
@@ -77,7 +96,7 @@ class TrackAnimation
             
         }
         // Request the next frame of the animation.
-        animation = requestAnimationFrame(animateLine);
+        this.animation = requestAnimationFrame(this.animateLine);
     }
 
 }
@@ -145,3 +164,5 @@ function toggleOptionsTab()
 
     optionsState = !optionsState;
 }
+
+var trackAnimation = new TrackAnimation([]);
