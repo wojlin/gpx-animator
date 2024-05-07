@@ -491,7 +491,7 @@ body
     margin: 5%;
     margin-top: 5%;
     background: black;
-    outline: #c85937 solid 0.2vh;
+    outline: white solid 0.2vh;
   }
 }
 
@@ -500,6 +500,7 @@ body
 .images-img
 {
   width: 100%;
+  cursor: pointer;
 }
 
 
@@ -735,4 +736,38 @@ body
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.gallery-marker-container-root
+{
+  z-index: 1000;
+}
+
+.gallery-marker-container
+{
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+
+.gallery-marker-image-container {
+	position: absolute;
+	height: auto;
+	width: 20vh;
+	background: white;
+	border-radius: 1vh;
+	overflow: hidden;
+	transform-origin: bottom left;
+	bottom: 3.5vh;
+	left: 3.5vh;
+}
+
+.gallery-marker-image-object
+{
+  width: 80%;
+  margin:auto;
+  display: block;
+  margin-top:1vh;
+  margin-bottom:1vh;
 }

@@ -16,6 +16,11 @@ class imagePlacer{
             let image = document.createElement("img");
             image.src = this.photos[i];
             image.classList.add("images-img")
+            image.onclick = (event)=>
+            {
+                dragAndDrop.spawnMarker(event.target.src);
+                event.target.parentNode.remove();
+            }
             imageBox.appendChild(image);
             this.imagesPanel.appendChild(imageBox);
         }
