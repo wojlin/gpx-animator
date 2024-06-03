@@ -13,6 +13,7 @@ class MapClass
         this.glowExist = false;
         this.markerExist = false;
         this.showDistance = false;
+        this.showElevation = false;
         this.elevationEnabled = false;
 
         this.marker;
@@ -488,18 +489,25 @@ class MapClass
             document.getElementById("title-widget").innerHTML = "";
         }
 
-        
+        if(mapObject.optionsDict["show-distance"].checked)
+        {
+            this.showDistance = true;
+        }
+        else
+        {
+            this.showDistance = false;
+        }
 
         if(mapObject.optionsDict["show-elevation"].checked)
         {
             document.getElementById('elevation-widget').style.display = "block";
             elevationWidget.calculate(this.points);
-            this.showDistance = true;
+            this.showElevation = true;
         }
         else
         {
             document.getElementById('elevation-widget').style.display = "none";
-            this.showDistance = false;
+            this.showElevation = false;
         }
        
         

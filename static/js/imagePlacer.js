@@ -19,6 +19,7 @@ class imagePlacer{
             image.onclick = (event)=>
             {
                 dragAndDrop.spawnMarker(event.target.src);
+                
                 event.target.parentNode.remove();
             }
             imageBox.appendChild(image);

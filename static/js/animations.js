@@ -189,8 +189,11 @@ class TrackAnimation
 
             elevationWidget.data[elevationWidget.data.length - 1] = point[2];
 
-    
-            elevationWidget.update();
+            if(mapObject.showElevation)
+            {
+                elevationWidget.update();
+            }
+            
 
             mapObject.flyTo(point[0], point[1])
 
