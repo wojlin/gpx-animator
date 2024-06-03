@@ -228,7 +228,7 @@ class fileUpload{
                     trackAnimation.updatePoints(upload.gpx);
                 }, 3000);
 
-                var images = new imagePlacer(upload.photos);
+                images.init(upload.photos);
 
             }, 2500); 
         }

@@ -56,11 +56,20 @@ class DragAndDrop
             el.style.backgroundSize = 'contain';
             el.style.width = 50 + 'px';
             el.style.height = 50 + 'px';
+            
+            let close = document.createElement('div');
+            close.innerHTML = "🗙";
+            close.className = "gallery-marker-remove";
+            
+            close.onclick = function(event) 
+            {
+                dragAndDrop.removeMarker(event.target);
+            };
 
             
-            
             el.appendChild(img);
-            container.appendChild(el)
+            container.appendChild(el);
+            el.appendChild(close);
             
 
             let dragMarker = new maptilersdk.Marker({element: container,draggable: true})
@@ -73,6 +82,19 @@ class DragAndDrop
 
         });
         
+    }
+
+    removeMarker(element)
+    {
+        let parent = element.parentNode.parentNode;
+        let imagesPanel = parent.children[0].children[0];
+        for(let i = 0; i < imagesPanel.children.length; i++)
+        {   
+            let image = imagesPanel.children[i].src;
+            console.log(image);
+            images.addImage(image);
+        }
+        parent.remove();
     }
 
     onDragEnd(event) 
@@ -99,6 +121,8 @@ class DragAndDrop
             }
         }
     }
+
+    
 
     mergeMarkers(sourceMarker, targetMarker)
     {       
