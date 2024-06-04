@@ -38,6 +38,7 @@ class DragAndDrop
             container.dataset.src = src;
             container.dataset.lat = startingPoint[0];
             container.dataset.lon = startingPoint[1];
+            container.dataset.pointIndex = 0;
 
             
 
@@ -118,8 +119,21 @@ class DragAndDrop
             if(Math.abs(targetPosX - ownPosX) < 10 && Math.abs(targetPosY - ownPosY) < 10) 
             {
                 dragAndDrop.mergeMarkers(event.target, manager.imageMarkers[i]);
+                return;
             }
         }
+
+        // find closest point on track and move marker there
+        let container = event.target;
+        let dataset = container._element.dataset;
+        let lat = container._lngLat["lat"];
+        let lon = container._lngLat["lng"];
+        let index = mapObject.coordsToTrackIndex(lat, lon);
+        
+        dataset.lon = mapObject.points[index][0];
+        dataset.lat = mapObject.points[index][1];
+        dataset.pointIndex = index;
+        container.setLngLat([dataset.lon, dataset.lat])
     }
 
     

@@ -237,6 +237,25 @@ class MapClass
             }); 
     }
 
+    coordsToTrackIndex(lat, lon)
+    {
+
+        let clostestIndex = 0;
+        let closestDistance = Number.MAX_SAFE_INTEGER;
+        for(let i = 0; i < this.points.length; i++)
+        {
+            let xDistance = Math.abs(this.points[i][0] - lon);
+            let yDistance = Math.abs(this.points[i][1] - lat);
+            let totalDistance = Math.sqrt( Math.pow(xDistance, 2) + Math.pow(yDistance, 2)); // a^2 + b^2 = c^2
+            if(totalDistance <= closestDistance)
+            {
+                closestDistance = totalDistance;
+                clostestIndex = i;
+            }
+        }
+        return clostestIndex;
+    }
+
     interpolatePoints(track, position) 
     {
         if (position <= 0) return track[0]; // If position is at or before the start of the track
