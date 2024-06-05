@@ -16,6 +16,11 @@ class MapClass
         this.showElevation = false;
         this.elevationEnabled = false;
 
+        this.showPhotos = false;
+        this.pauseOnPhoto = false;
+        this.pauseDuration = 0;
+        this.photoDisplayType = "";
+
         this.marker;
     }
 
@@ -256,14 +261,13 @@ class MapClass
         return clostestIndex;
     }
 
-    interpolatePoints(track, position) 
-    {
-        if (position <= 0) return track[0]; // If position is at or before the start of the track
-        if (position >= 1) return track[track.length - 1]; // If position is at or after the end of the track
-
+    interpolatePoints(track, position) {
+        if (position <= 0) return { point: track[0], index: 0 }; // If position is at or before the start of the track
+        if (position >= 1) return { point: track[track.length - 1], index: track.length - 1 }; // If position is at or after the end of the track
+    
         var cumulativeDistances = [0]; // Array to store cumulative distances
         var totalDistance = 0;
-
+    
         // Calculate cumulative distances
         for (var i = 1; i < track.length; i++) {
             var prevPoint = track[i - 1];
@@ -272,16 +276,16 @@ class MapClass
             totalDistance += distance;
             cumulativeDistances.push(totalDistance);
         }
-
+    
         var targetDistance = totalDistance * position;
-
+    
         // Find the segment where the target distance falls
         for (var i = 0; i < cumulativeDistances.length - 1; i++) {
             if (cumulativeDistances[i] <= targetDistance && targetDistance <= cumulativeDistances[i + 1]) {
                 if (cumulativeDistances[i] === targetDistance) {
-                    return track[i];
+                    return { point: track[i], index: i };
                 } else if (cumulativeDistances[i + 1] === targetDistance) {
-                    return track[i + 1];
+                    return { point: track[i + 1], index: i + 1 };
                 } else {
                     var ratio = (targetDistance - cumulativeDistances[i]) / (cumulativeDistances[i + 1] - cumulativeDistances[i]);
                     var prevPoint = track[i];
@@ -290,11 +294,11 @@ class MapClass
                     for (var j = 0; j < prevPoint.length; j++) {
                         interpolatedPoint.push(prevPoint[j] + (point[j] - prevPoint[j]) * ratio);
                     }
-                    return interpolatedPoint;
+                    return { point: interpolatedPoint, index: i };
                 }
             }
         }
-
+    
         // This shouldn't happen if the input data is correct
         return null;
     }
@@ -529,8 +533,27 @@ class MapClass
             this.showElevation = false;
         }
        
-        
-        
+        if(mapObject.optionsDict["display-photos"].checked)
+        {
+            this.showPhotos = true;
+        }
+        else
+        {
+            this.showPhotos = false;
+        }
+
+        if(mapObject.optionsDict["photo-pause"].checked)
+        {
+            this.pauseOnPhoto = true;
+        }
+        else
+        {
+            this.pauseOnPhoto = false;
+        }
+
+
+        this.pauseDuration = mapObject.optionsDict["pause-duration"].value;
+        this.photoDisplayType = mapObject.optionsDict["display-select"].options[mapObject.optionsDict["display-select"].selectedIndex ].value 
         
      
     }

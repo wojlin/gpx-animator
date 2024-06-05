@@ -39,7 +39,7 @@ class DragAndDrop
             container.dataset.lat = startingPoint[0];
             container.dataset.lon = startingPoint[1];
             container.dataset.pointIndex = 0;
-
+            container.dataset.passed = false;
             
 
             let img = document.createElement('div');

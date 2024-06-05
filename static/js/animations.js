@@ -2,6 +2,8 @@ class TrackAnimation
 {
     constructor(points)
     {
+        this.firstPlay = true;
+
         this.speedFactor = 200; 
         this.animation; 
         this.startTime = 0;
@@ -51,6 +53,14 @@ class TrackAnimation
 
     restart()
     {
+
+        for(let i = 0; i < manager.imageMarkers.length; i++)
+        {
+            let marker = manager.imageMarkers[i]._element;
+            marker.dataset.passed = false;
+            marker.style.display = "none";
+        }
+
         this.resetTime = true;
         elevationWidget.currentIndex = 0;
         elevationWidget.data = [];
@@ -113,6 +123,11 @@ class TrackAnimation
 
     play()
     {
+        if(this.firstPlay)
+        {
+            this.restart();
+            this.firstPlay = false;
+        }
         this.resetTime = true;
         elevationWidget.currentIndex = 0;
         elevationWidget.data = [];
@@ -122,6 +137,13 @@ class TrackAnimation
     pause()
     {
         cancelAnimationFrame(this.animation);
+
+        for(let i = 0; i < manager.imageMarkers.length; i++)
+        {
+            let marker = manager.imageMarkers[i]._element;
+            marker.dataset.passed = false;
+            marker.style.display = "block";
+        }
     }
 
 
@@ -132,7 +154,7 @@ class TrackAnimation
     }
 
 
-    animateLine(timestamp) 
+    async animateLine(timestamp) 
     {
         if (this.resetTime) 
         {
@@ -164,39 +186,28 @@ class TrackAnimation
 
             console.log(this.current)
  
-            let point = mapObject.interpolatePoints(this.points, this.current);
-            
-            
-
+            let output = mapObject.interpolatePoints(this.points, this.current);
+            let point = output["point"];
+            let index = output["index"];
             this.geojson.features[0].geometry.coordinates.push([point[0], point[1], point[2]]);
-
-            elevationWidget.currentIndex++;
-
-            elevationWidget.data = [];
-
-            let iFound = 0;
-
-            for(let i  = 0; i < this.points.length; i ++)
-            {   
-                elevationWidget.data.push(null);
-                if(point[3] < this.points[i][3])
-                {
-                    break;
-                }
-            }
-
-        
-
-            elevationWidget.data[elevationWidget.data.length - 1] = point[2];
 
             if(mapObject.showElevation)
             {
+                elevationWidget.currentIndex++;
+                elevationWidget.data = [];
+                let iFound = 0;
+                for(let i  = 0; i < this.points.length; i ++)
+                {   
+                    elevationWidget.data.push(null);
+                    if(point[3] < this.points[i][3])
+                    {
+                        break;
+                    }
+                }
+                elevationWidget.data[elevationWidget.data.length - 1] = point[2];        
                 elevationWidget.update();
             }
             
-
-            mapObject.flyTo(point[0], point[1])
-
             if(mapObject.markerExist)
             {
                 mapObject.marker.setLngLat([point[0], point[1]]);
@@ -216,10 +227,36 @@ class TrackAnimation
             {
                 mapObject.map.getSource('track').setData(this.geojson);
             }
+
+            for(let i = 0; i < manager.imageMarkers.length; i++)
+            {
+                let marker = manager.imageMarkers[i]._element;
+                if(marker.dataset.pointIndex == index && marker.dataset.passed == "false")
+                {
+                    console.log("passed marker:", marker);
+                    marker.dataset.passed = true;
+                    if(mapObject.showPhotos)
+                    {
+                        marker.style.display = "block";
+
+                        if(mapObject.pauseOnPhoto)
+                        {
+                            await this.sleep(mapObject.pauseDuration * 1000);
+                            this.startTime += mapObject.pauseDuration * 1000;
+                        }
+                    }
+                }
+            }
+
+            mapObject.flyTo(point[0], point[1])
             
         }
         // Request the next frame of the animation.
         this.animation = requestAnimationFrame(this.animateLine);
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
 }
