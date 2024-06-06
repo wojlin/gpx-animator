@@ -319,7 +319,7 @@ class MapClass
 
         this.optionsDict = optionsDict;
 
-        trackAnimation.restart();
+        trackAnimation.hardRestart();
         trackAnimation.speedFactor = 1100 - optionsDict["animation-speed"].value;
 
         mapObject.zoomTo(mapObject.points[0][0], mapObject.points[0][1], optionsDict["zoom-level"].value)
@@ -524,7 +524,14 @@ class MapClass
         if(mapObject.optionsDict["show-elevation"].checked)
         {
             document.getElementById('elevation-widget').style.display = "block";
-            elevationWidget.calculate(this.points);
+            try
+            {
+                elevationWidget.calculate(this.points);
+            }
+            catch
+            {
+
+            }
             this.showElevation = true;
         }
         else
@@ -549,6 +556,7 @@ class MapClass
         else
         {
             this.pauseOnPhoto = false;
+
         }
 
 

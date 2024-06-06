@@ -72,7 +72,7 @@
                     </tr>
                     <tr class="options-table-row">
                         <td class="options-table">
-                            <input type="color" id="line-color" name="line-color" value="#f6b73c" />
+                            <input type="color" id="line-color" name="line-color" value="#ffffff" />
                         </td>
                         <td  class="options-table">
                             <label for="line-color">line color</label>
@@ -110,7 +110,7 @@
                     </tr>
                     <tr class="options-table-row">
                         <td class="options-table">
-                            <input type="color" id="glow-color" name="glow-color" value="#f6b73c" />
+                            <input type="color" id="glow-color" name="glow-color" value="#fc0303" />
                         </td>
                         <td  class="options-table">
                             <label for="glow-color">glow color</label>
@@ -147,7 +147,7 @@
 
                     <tr class="options-table-row">
                         <td class="options-table">
-                            <input type="color" id="marker-color" name="marker-color" value="#f6b73c" />
+                            <input type="color" id="marker-color" name="marker-color" value="#000000" />
                         </td>
                         <td  class="options-table">
                             <label for="marker-color">marker color</label>
@@ -187,7 +187,7 @@
                     
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="checkbox" id="show-title" name="show-title" />
+                            <input type="checkbox" id="show-title" name="show-title"  checked="true"/>
                         </td>
                         <td  class="options-table">
                             <label for="show-title">show gpx title</label>
@@ -196,7 +196,7 @@
 
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="checkbox" id="show-distance" name="show-distance" />
+                            <input type="checkbox" id="show-distance" name="show-distance" checked="true"/>
                         </td>
                         <td  class="options-table">
                             <label for="show-distance">show distance</label>
@@ -205,7 +205,7 @@
 
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="checkbox" id="show-elevation" name="show-elevation" />
+                            <input type="checkbox" id="show-elevation" name="show-elevation"  checked="true"/>
                         </td>
                         <td  class="options-table">
                             <label for="show-elevation">show elevation</label>
@@ -271,7 +271,7 @@
                     
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="range" id="animation-speed" name="animation-speed" min="100" max="1000" value="100" />
+                            <input type="range" id="animation-speed" name="animation-speed" min="100" max="1000" value="400" />
                         </td>
                         <td  class="options-table">
                             <label for="animation-speed">animation speed</label>
@@ -293,15 +293,28 @@
                     
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="checkbox" id="display-photos" name="display-photos" />
+                            <input type="checkbox" id="display-photos" name="display-photos" checked="true"/>
                         </td>
                         <td  class="options-table">
                             <label for="display-photos">display photos</label>
                         </td>
                     </tr>
+
+                    <tr class="options-table-row">
+                        <td class="options-table" id="display-select-placeholder">
+                            <select id="display-select">
+                                <option data-name="marker" data-src="static/images/icons/0.svg"></option>
+                                <option data-name="animation" data-src="static/images/icons/1.svg"></option>
+                              </select>
+                        </td>
+                        <td  class="options-table">
+                            <label for="display-select">display type</label>
+                        </td>
+                    </tr>
+                    
                     <tr class="options-table-row">
                         <td  class="options-table">
-                            <input type="checkbox" id="photo-pause" name="photo-pause" />
+                            <input type="checkbox" id="photo-pause" name="photo-pause" checked="true"/>
                         </td>
                         <td  class="options-table">
                             <label for="photo-pause">pause on photo</label>
@@ -315,17 +328,7 @@
                             <label for="pause-duration">pause duration</label>
                         </td>
                     </tr>
-                    <tr class="options-table-row">
-                        <td class="options-table" id="display-select-placeholder">
-                            <select id="display-select">
-                                <option data-name="marker" data-src="static/images/icons/0.svg"></option>
-                                <option data-name="animation" data-src="static/images/icons/1.svg"></option>
-                              </select>
-                        </td>
-                        <td  class="options-table">
-                            <label for="display-select">display type</label>
-                        </td>
-                    </tr>
+                    
                     
                   </table>
             </div>
@@ -343,7 +346,7 @@
             <div id="buttons-panel">
                 <button onclick="trackAnimation.play();" id="play-button">Play</button>
                 <button onclick="trackAnimation.pause();" id="pause-button">Pause</button>
-                <button onclick="trackAnimation.restart();" id="restart-button">Restart</button>
+                <button onclick="trackAnimation.hardRestart();" id="restart-button">Restart</button>
             </div>
 
         </div>

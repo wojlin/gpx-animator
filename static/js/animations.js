@@ -51,6 +51,86 @@ class TrackAnimation
         };
     }
 
+    hardRestart()
+    {
+        this.firstPlay = true;
+
+        for(let i = 0; i < manager.imageMarkers.length; i++)
+        {
+            let marker = manager.imageMarkers[i]._element;
+            marker.dataset.passed = false;
+            marker.style.display = "block";
+
+            let close = marker.getElementsByClassName("gallery-marker-remove")[0];
+            close.style.display = "block";
+        }
+
+        this.resetTime = true;
+        elevationWidget.currentIndex = 0;
+        elevationWidget.data = [];
+
+
+        this.geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': mapObject.points
+                    }
+                }
+            ]
+        };
+
+        let geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': mapObject.points
+                    }
+                }
+            ]
+        };
+
+        if(mapObject.showElevation)
+        {
+            elevationWidget.data = [0];       
+            elevationWidget.update();
+        }
+
+        if(!(!mapObject.map.getSource('glow')))
+        {
+            mapObject.map.getSource('glow').setData(geojson);
+        }
+
+        if(!(!mapObject.map.getSource('track')))
+        {
+            mapObject.map.getSource('track').setData(geojson);
+        }
+
+        if(mapObject.markerExist)
+        {
+            mapObject.marker.setLngLat([mapObject.points[0][0], mapObject.points[0][1]]);
+        }
+
+        if(mapObject.showDistance)
+        {
+            document.getElementById("show-distance-text").innerHTML =  0 + " KM";
+        }
+
+        mapObject.flyTo(mapObject.points[0][0], mapObject.points[0][1])
+        
+        
+        this.current = 0;
+        this.progress = 0;
+        this.startTime = 0;
+        this.startTime = performance.now(); 
+    }
+
     restart()
     {
 
@@ -59,6 +139,9 @@ class TrackAnimation
             let marker = manager.imageMarkers[i]._element;
             marker.dataset.passed = false;
             marker.style.display = "none";
+
+            let close = marker.getElementsByClassName("gallery-marker-remove")[0];
+            close.style.display = "none";
         }
 
         this.resetTime = true;
@@ -107,7 +190,7 @@ class TrackAnimation
             mapObject.marker.setLngLat([mapObject.points[0][0], mapObject.points[0][1]]);
         }
 
-        if(mapObject.showDistance)
+        if(mapObject.showDistance && mapObject.markerExist)
         {
             document.getElementById("show-distance-text").innerHTML =  0 + " KM";
         }
@@ -137,13 +220,6 @@ class TrackAnimation
     pause()
     {
         cancelAnimationFrame(this.animation);
-
-        for(let i = 0; i < manager.imageMarkers.length; i++)
-        {
-            let marker = manager.imageMarkers[i]._element;
-            marker.dataset.passed = false;
-            marker.style.display = "block";
-        }
     }
 
 
