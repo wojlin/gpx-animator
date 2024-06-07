@@ -117,7 +117,7 @@ class TrackAnimation
             mapObject.marker.setLngLat([mapObject.points[0][0], mapObject.points[0][1]]);
         }
 
-        if(mapObject.showDistance)
+        if(mapObject.showDistance && mapObject.markerExist)
         {
             document.getElementById("show-distance-text").innerHTML =  0 + " KM";
         }
@@ -313,12 +313,29 @@ class TrackAnimation
                     marker.dataset.passed = true;
                     if(mapObject.showPhotos)
                     {
-                        marker.style.display = "block";
+
+                        let urls = [];
+                        let photoContainer = marker.children[0].children[0];
+                        for(let i = 0; i < photoContainer.childNodes.length; i++)
+                        {
+                            urls.push(photoContainer.children[i].src);
+                        }
+                        console.log(urls)
+
+                        if(mapObject.photoDisplayType == "marker")
+                        {
+                            marker.style.display = "block";
+                        }
+                        else
+                        {
+                            slideshow.init(urls, mapObject.pauseDuration * urls.length)
+                        }
+                        
 
                         if(mapObject.pauseOnPhoto)
                         {
-                            await this.sleep(mapObject.pauseDuration * 1000);
-                            this.startTime += mapObject.pauseDuration * 1000;
+                            await this.sleep(mapObject.pauseDuration * 1000 * urls.length);
+                            this.startTime += mapObject.pauseDuration * 1000 * urls.length;
                         }
                     }
                 }
