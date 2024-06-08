@@ -4,6 +4,9 @@ class TrackAnimation
     {
         this.firstPlay = true;
 
+        this.isPlaying = false;
+        this.isPaused = false;
+
         this.speedFactor = 200; 
         this.animation; 
         this.startTime = 0;
@@ -53,6 +56,11 @@ class TrackAnimation
 
     hardRestart()
     {
+        cancelAnimationFrame(this.animation);
+
+        this.isPlaying = false;
+        this.isPaused = false;
+
         this.firstPlay = true;
 
         for(let i = 0; i < manager.imageMarkers.length; i++)
@@ -206,20 +214,29 @@ class TrackAnimation
 
     play()
     {
-        if(this.firstPlay)
+        if(!this.isPlaying)
         {
-            this.restart();
-            this.firstPlay = false;
+            if(this.firstPlay)
+            {
+                this.restart();
+                this.firstPlay = false;
+            }
+            this.isPlaying = true;
+            this.isPaused = false;
+            this.resetTime = true;
+            elevationWidget.currentIndex = 0;
+            elevationWidget.data = [];
+            this.animateLine(); 
         }
-        this.resetTime = true;
-        elevationWidget.currentIndex = 0;
-        elevationWidget.data = [];
-        this.animateLine();  
     }
 
     pause()
     {
-        cancelAnimationFrame(this.animation);
+        if(!this.isPaused)
+        {
+            cancelAnimationFrame(this.animation);
+            this.isPaused = true;
+        }
     }
 
 
@@ -419,3 +436,38 @@ function toggleOptionsTab()
 }
 
 var trackAnimation = new TrackAnimation([]);
+
+
+
+
+
+
+
+
+window.addEventListener("keyup", function (event) {
+    if (event.defaultPrevented) {
+      return; 
+    }
+  
+    switch (event.key)
+     {
+      case "p":
+        trackAnimation.play();
+        break;
+      case "s":
+        trackAnimation.pause();
+        break;
+      case "r":
+        trackAnimation.hardRestart();
+        break;
+      case "h":
+        toggleOptionsTab();
+        toggleImagesTab();
+        break;
+      default:
+        return; 
+    }
+  
+    event.preventDefault();
+  }, true);
+  
