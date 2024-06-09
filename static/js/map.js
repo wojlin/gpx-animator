@@ -21,6 +21,8 @@ class MapClass
         this.pauseDuration = 0;
         this.photoDisplayType = "";
 
+        this.recordingEnabled = false;
+
         this.marker;
     }
 
@@ -556,7 +558,15 @@ class MapClass
         else
         {
             this.pauseOnPhoto = false;
+        }
 
+        if(mapObject.optionsDict["enable-recording"].checked)
+        {
+            this.recordingEnabled = true;
+        }
+        else
+        {
+            this.recordingEnabled = false;
         }
 
 

@@ -56,6 +56,17 @@ class TrackAnimation
 
     hardRestart()
     {
+        if(mapObject.recordingEnabled && recorder.isRecording)
+        {
+            recorder.stop();
+            recorder.showRecordingPanel();
+        }
+
+        if (!window.screenTop && !window.screenY) 
+        {
+            document.exitFullscreen();
+        }
+        
         cancelAnimationFrame(this.animation);
 
         this.isPlaying = false;
@@ -142,6 +153,8 @@ class TrackAnimation
     restart()
     {
 
+        
+
         for(let i = 0; i < manager.imageMarkers.length; i++)
         {
             let marker = manager.imageMarkers[i]._element;
@@ -221,6 +234,24 @@ class TrackAnimation
                 this.restart();
                 this.firstPlay = false;
             }
+
+            if(mapObject.recordingEnabled)
+            {
+
+                recorder.record();
+
+                
+
+                
+            }
+
+            if (!document.fullscreenElement) 
+            {
+                document.documentElement.requestFullscreen();
+            } 
+
+            hideTabs();
+            
             this.isPlaying = true;
             this.isPaused = false;
             this.resetTime = true;
@@ -235,6 +266,18 @@ class TrackAnimation
         if(!this.isPaused)
         {
             cancelAnimationFrame(this.animation);
+
+            if(mapObject.recordingEnabled && recorder.isRecording)
+            {
+                recorder.stop();
+                recorder.showRecordingPanel();
+            }
+
+            if (!window.screenTop && !window.screenY) 
+            {
+                document.exitFullscreen();
+            }
+
             this.isPaused = true;
         }
     }
@@ -274,10 +317,10 @@ class TrackAnimation
 
             if(this.current > 0.99)
             {
-                this.restart();
+                this.hardRestart();
             }
 
-            console.log(this.current)
+            console.log(this.current, recorder.isRecording)
  
             let output = mapObject.interpolatePoints(this.points, this.current);
             let point = output["point"];
@@ -403,6 +446,14 @@ showTitle(["Welcome to GPX animator!", "First step is to upload a GPX file of yo
 var imagesState = true;
 var optionsState = true;
 
+function hideTabs()
+{
+    document.getElementById("options-tab").classList.remove("show-options-tab");
+    document.getElementById("options-tab").classList.add("hide-options-tab");
+    document.getElementById("image-tab").classList.remove("show-image-tab");
+    document.getElementById("image-tab").classList.add("hide-image-tab");
+}
+
 function toggleImagesTab()
 {
     if(imagesState)
@@ -461,8 +512,7 @@ window.addEventListener("keyup", function (event) {
         trackAnimation.hardRestart();
         break;
       case "h":
-        toggleOptionsTab();
-        toggleImagesTab();
+        hideTabs();
         break;
       default:
         return; 

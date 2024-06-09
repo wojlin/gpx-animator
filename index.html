@@ -328,6 +328,15 @@
                             <label for="pause-duration">pause duration</label>
                         </td>
                     </tr>
+
+                    <tr class="options-table-row">
+                        <td  class="options-table">
+                            <input type="checkbox" id="enable-recording" name="enable-recording" checked="true"/>
+                        </td>
+                        <td  class="options-table">
+                            <label for="enable-recording">enable recording</label>
+                        </td>
+                    </tr>
                     
                     
                   </table>
@@ -350,6 +359,9 @@
                 <button onclick="trackAnimation.hardRestart();" id="restart-button">Restart</button>
             </div>
 
+    
+            
+
         </div>
 
         <div id="title-widget"></div>
@@ -361,7 +373,15 @@
         <div id="map-container">
             <div id="map"></div>
         </div>
+
+        <div id="recording-panel">
+            <video id="recording-preview" width="300" height="200" autoplay muted></video>
+            <div id="recording-screen"></div>
+            <a id="download-recording-button">download</a>
+            <button onclick="document.getElementById('recording-panel').style.display = 'none';" id="recording-panel-close">x</button>
+        </div>
         
+        <script src="static/js/recorder.js"></script>
         <script src="static/js/slideshow.js"></script>
         <script src="static/js/sceneManager.js"></script>
         <script src="static/js/dragAndDrop.js"></script>

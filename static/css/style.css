@@ -787,3 +787,81 @@ body
 	text-align: center;
 	line-height: 1.3vh;
 }
+
+
+
+#recording-panel
+{
+  position: absolute;
+  width: 30vh;
+  height: 30vh;
+  background-color: #000;
+  border: solid white 0.25vh;
+  border-radius: 2vh;
+  left:0;
+  right:0;
+  margin:auto;
+  z-index: 100;
+  top:50%;
+  transform: translate(-00%,-50%);
+  display: none;
+}
+
+#recording-panel-close
+{
+  background: black;
+  color: white;
+  border: solid 0.15vh white;
+  border-radius: 100%;
+  text-align: center;
+  position: absolute;
+  right:0.5vh;
+  top:0.5vh;
+  font-size: 2vh;
+  line-height: 0.1vh;
+  height: 2vh;
+  width: 2vh;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#recording-panel-close:hover
+{
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+#recording-preview
+{
+  width: 20vh;
+  height: 20vh;
+  background: black;
+  border: solid 0.2vh white;
+  margin: auto;
+  margin-top: 2vh;
+  display: block;
+}
+
+#download-recording-button
+{
+  width:50%;
+  margin:auto;
+  display: block;
+  color:white;
+  background: black;
+  border: solid 0.2vh rgb(255, 255, 255);
+  border-radius: 1vh;
+  font-size: 1.5vh;
+  padding: 0.5vh;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top:2vh;
+  text-decoration: none;
+  text-align: center;
+}
+
+#download-recording-button:hover
+{
+  transform: scale(1.1);
+  opacity: 0.8;
+}
