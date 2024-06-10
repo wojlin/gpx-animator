@@ -23,10 +23,17 @@ class Paralax
             this.panels.push(document.getElementById(this.panelTemplateId+i));
         }
 
-        document.addEventListener("DOMContentLoaded", function() 
-        {
-            paralax.config();
-        });
+        this.background = document.getElementById("background-background");
+
+  
+
+        document.onreadystatechange = function () {
+            if (document.readyState == "complete") {
+                paralax.config();
+                document.addEventListener('mousemove', paralax.updateCursorPosition);
+            }
+          }
+          
         
         
     }
@@ -34,14 +41,31 @@ class Paralax
 
     config()
     {
+
+        this.screenWidth = window.innerWidth;
+        this.screenHeight = window.innerHeight;
+        this.centerX = this.screenWidth / 2;
+        this.centerY = this.screenHeight / 2;
+
         for( let i = 1; i <= this.levelsAmount; i++)
         {   
             let panel = document.getElementById(this.panelTemplateId+i);
             panel.style.width = (this.screenWidth * 1.3) + "px";
-        }
+        } 
+
+        this.background.style.background = "#210002";
+        this.background.style.width = this.screenWidth + "px";
+        this.background.style.height = this.screenHeight + "px";
+        this.background.style.position = 'absolute';
+        this.background.style.zIndex = '-1';
+
+        let style =  this.panels[0].currentStyle || window.getComputedStyle(this.panels[0]);
+
+        let top = parseFloat(style.top.slice(0, -2))
+        console.log(this.panels[0].offsetHeight, top)
+
+        this.background.style.top = (this.panels[0].offsetHeight + (top*1.15)).toString() + "px";
         
-        
-        document.addEventListener('mousemove', this.updateCursorPosition);
     }
 
 
@@ -72,6 +96,7 @@ class Paralax
 
 var paralax = new Paralax();
 
-window.addEventListener("resize", () => {
-    //window.location.reload();
+window.addEventListener("resize", () => 
+{
+    paralax.config();
 });
