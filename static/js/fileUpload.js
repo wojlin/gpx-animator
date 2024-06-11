@@ -202,7 +202,7 @@ class fileUpload{
                 document.getElementById("upload-title").innerHTML = "add photos";
                 upload.hideNextButton();
                 document.getElementById("upload-text").innerHTML = "";
-                showTitle(["Now add photos from your trip", "(it would be great if they have loaction metadata)"])
+                showTitle(["Now add photos from your trip", "(it would be great if they have loaction metadata or date timestamp)"])
 
             }, 2000); 
         }else
