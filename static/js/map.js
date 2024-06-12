@@ -16,12 +16,14 @@ class MapClass
         this.showElevation = false;
         this.elevationEnabled = false;
 
+        this.rotateCamera = false;
         this.showPhotos = false;
         this.pauseOnPhoto = false;
         this.pauseDuration = 0;
         this.photoDisplayType = "";
 
         this.recordingEnabled = false;
+        this.useFullscreen = false;
 
         this.marker;
     }
@@ -58,12 +60,24 @@ class MapClass
         
     }
 
-    flyTo(lat, lon)
-    {
-        this.map.flyTo({
-            center: [lat,lon],
-            essential: true
-        });
+    flyTo(lat, lon, rotation=0)
+    {   
+        
+
+        if(rotation == 0)
+        {
+            this.map.flyTo({
+                center: [lat,lon],
+                essential: true    
+            });
+        }else
+        {
+            this.map.jumpTo({
+                center: [lat,lon],
+                bearing: rotation
+                });
+        }
+        
         
     }
 
@@ -305,6 +319,29 @@ class MapClass
         return null;
     }
     
+
+    degreesToRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
+    
+    radiansToDegrees(radians) {
+        return radians * 180 / Math.PI;
+    }
+    
+    getBearing(startLat, startLon, endLat, endLon) {
+        const startLatRad = this.degreesToRadians(startLat);
+        const endLatRad = this.degreesToRadians(endLat);
+        const deltaLonRad = this.degreesToRadians(endLon - startLon);
+    
+        const y = Math.sin(deltaLonRad) * Math.cos(endLatRad);
+        const x = Math.cos(startLatRad) * Math.sin(endLatRad) -
+                  Math.sin(startLatRad) * Math.cos(endLatRad) * Math.cos(deltaLonRad);
+    
+        let bearingRad = Math.atan2(y, x);
+        let bearingDeg = this.radiansToDegrees(bearingRad);
+        return (bearingDeg + 360) % 360; // Normalize to 0-360 degrees
+    }
+    
     
 
     applyOptionsToMap()
@@ -541,7 +578,16 @@ class MapClass
             document.getElementById('elevation-widget').style.display = "none";
             this.showElevation = false;
         }
-       
+        
+        if(mapObject.optionsDict["rotate-camera"].checked)
+        {
+            this.rotateCamera = true;
+        }
+        else
+        {
+            this.rotateCamera = false;
+        }
+
         if(mapObject.optionsDict["display-photos"].checked)
         {
             this.showPhotos = true;
@@ -567,6 +613,15 @@ class MapClass
         else
         {
             this.recordingEnabled = false;
+        }
+
+        if(mapObject.optionsDict["use-fullscreen"].checked)
+        {
+            this.useFullscreen = true;
+        }
+        else
+        {
+            this.useFullscreen = false;
         }
 
 

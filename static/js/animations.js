@@ -245,7 +245,8 @@ class TrackAnimation
                 
             }
 
-            if (!document.fullscreenElement) 
+
+            if (!document.fullscreenElement && mapObject.useFullscreen) 
             {
                 document.documentElement.requestFullscreen();
             } 
@@ -381,7 +382,7 @@ class TrackAnimation
                             urls.push(photoContainer.children[i].src);
                         }
                         console.log(urls)
-
+                        console.log(mapObject.photoDisplayType)
                         if(mapObject.photoDisplayType == "marker")
                         {
                             marker.style.display = "block";
@@ -401,7 +402,19 @@ class TrackAnimation
                 }
             }
 
-            mapObject.flyTo(point[0], point[1])
+            let rotation = 0;
+            if(mapObject.rotateCamera)
+            {
+                let pre = mapObject.interpolatePoints(this.points, this.current-0.01);
+                let prepoint = pre["point"];
+                let preX = prepoint[0];
+                let X = point[0];
+                let preY = prepoint[1];
+                let Y = point[1];
+
+                rotation = -mapObject.getBearing(preX, preY, X, Y) + 90;
+            }
+            mapObject.flyTo(point[0], point[1], rotation)
             
         }
         // Request the next frame of the animation.
