@@ -865,3 +865,122 @@ body
   transform: scale(1.1);
   opacity: 0.8;
 }
+
+
+
+#donation-container
+{
+  z-index: 100;
+  position: absolute;
+  right:25vh;
+  bottom:-40vh;
+}
+
+#donation-bear
+{
+  width: 20vh;
+  position: absolute;
+  left:0;
+  bottom: 0;
+}
+
+#donation-cloud-1
+{
+  background-color: white;
+  position: absolute;
+  bottom: 32vh;
+  right:-3vh;
+  width:3vh;
+  height:3vh;
+  border-radius: 100%;
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+#donation-cloud-2
+{
+  background-color: white;
+  position: absolute;
+  bottom: 35vh;
+  right:0vh;
+  width:4vh;
+  height:4vh;
+  border-radius: 100%;
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+#donation-cloud-3
+{
+  background-color: white;
+  position: absolute;
+  bottom: 38vh;
+  right:4vh;
+  width:5vh;
+  height:5vh;
+  border-radius: 100%;
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+
+#donation-cloud-4
+{
+  background-color: white;
+  position: absolute;
+  bottom: 42vh;
+  right:9vh;
+  width:25vh;
+  border-radius: 3vh;
+  opacity: 0;
+  transition: all 0.5s;
+}
+#donation-cloud-4 >p
+{
+  font-size: 1vh;
+  margin: 1.5vh;
+  user-select: none;
+  font-weight: bold;
+}
+
+#donation-close
+{
+  color: red;
+  position: absolute;
+  right:1vh;
+  bottom:-0.5vh;
+  font-size: 3vh;
+  background: none;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+#donation-close:hover
+{
+  transform: scale(1.1);
+}
+
+#donate-button-container
+{
+  margin:auto;
+  display: block;
+  width: min-content;
+  margin-bottom: 1vh;
+}
+
+.donation-add-class
+{
+  transition: all 3s !important;
+  bottom: -10vh !important;
+}
+
+.donation-hide-class
+{
+  transition: all 5s !important;
+  bottom: -40vh !important;
+}

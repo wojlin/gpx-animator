@@ -390,7 +390,36 @@
             <a id="download-recording-button">download</a>
             <button onclick="document.getElementById('recording-panel').style.display = 'none';" id="recording-panel-close">x</button>
         </div>
+
         
+
+        <div id="donation-container">
+            <img id="donation-bear" src="static/images/bear.png" />
+            <div id="donation-cloud-1"></div>
+            <div id="donation-cloud-2"></div>
+            <div id="donation-cloud-3"></div>
+            <div id="donation-cloud-4">
+                <p>Please support me if you like the tool I wrote and want me to develop it and other projects in the future</p>
+                <button onclick="donation.close();" id="donation-close">🗙</button>
+                <div id="donate-button-container">
+                    <div id="donate-button"></div>
+                    <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+                    <script>
+                    PayPal.Donation.Button({
+                    env:'production',
+                    hosted_button_id:'PGUGUVNN2EEHW',
+                    image: {
+                    src:'https://www.paypalobjects.com/en_US/PL/i/btn/btn_donateCC_LG.gif',
+                    alt:'Donate with PayPal button',
+                    title:'PayPal - The safer, easier way to pay online!',
+                    }
+                    }).render('#donate-button');
+                    </script>
+                </div>
+            </div>
+        </div>
+            
+        <script src="static/js/donation.js"></script>
         <script src="static/js/recorder.js"></script>
         <script src="static/js/slideshow.js"></script>
         <script src="static/js/sceneManager.js"></script>
