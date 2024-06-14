@@ -103,13 +103,24 @@ class fileUpload{
                         let name = content.getElementsByTagName("name")[0].innerHTML;
                         
                         let points = [];
-                        let pointsRaw = content.getElementsByTagName("trkseg")[0].children;
+
+                        let pointsRaw = [];
+                        let allPointsRaw = content.getElementsByTagName("trkseg");
+                        for (let y = 0; y < allPointsRaw.length; y++)
+                        {
+                            let p = allPointsRaw[y].children;
+                            for(let z = 0; z < p.length; z++)
+                            {
+                                pointsRaw.push(p[z]);
+                            }
+                        }
+                        //let pointsRaw = content.getElementsByTagName("trkseg")[0].children;
                         console.log(pointsRaw)
-                        for( let i = 0; i < pointsRaw.length; i++)
+                        for( let a = 0; a < pointsRaw.length; a++)
                         {   
-                            let x = parseFloat(pointsRaw[i].getAttribute("lat"));
-                            let y = parseFloat(pointsRaw[i].getAttribute("lon"));
-                            let z = parseFloat(pointsRaw[i].getElementsByTagName("ele")[0].innerHTML);
+                            let x = parseFloat(pointsRaw[a].getAttribute("lat"));
+                            let y = parseFloat(pointsRaw[a].getAttribute("lon"));
+                            let z = parseFloat(pointsRaw[a].getElementsByTagName("ele")[0].innerHTML);
                             points.push([x,y,z]);
                         }
                         
@@ -162,7 +173,11 @@ class fileUpload{
                     }
                     fileReader.readAsDataURL(this.file[i]);
                 
-                
+                    if(!donation.closed)
+                    {
+                        donation.close();
+                    }
+
                     this.showNextButton();
                 
 

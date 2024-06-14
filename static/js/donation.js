@@ -12,7 +12,7 @@ class Donation{
         ];
 
         this.showAfter = 5;
-
+        this.closed = false;
         setTimeout(function()
         {
             donation.show()
@@ -85,6 +85,7 @@ class Donation{
         setTimeout(function()
         {
             donation.container.style.display = "none";
+            donation.closed = true;
         }, 6000 ); 
         
     }

@@ -45,7 +45,9 @@ class MapClass
         this.display = true;
         this.points = this.switchLatLon(points);
 
- 
+        this.map.on('load', async function() {
+            console.log("MAP LOADED!!!!")
+        });
         
     
     }
@@ -433,6 +435,75 @@ class MapClass
             this.trackExist = false;
             this.lastStyle = mapStyle;
         }
+
+        console.log("loading easy options...")
+        if(mapObject.optionsDict["show-title"].checked)
+        {
+            document.getElementById("title-widget").innerHTML = upload.name;
+        }
+        else
+        {
+            document.getElementById("title-widget").innerHTML = "";
+        }
+
+        if(mapObject.optionsDict["show-distance"].checked)
+        {
+            this.showDistance = true;
+        }
+        else
+        {
+            this.showDistance = false;
+        }
+
+        if(mapObject.optionsDict["rotate-camera"].checked)
+        {
+            this.rotateCamera = true;
+        }
+        else
+        {
+            this.rotateCamera = false;
+        }
+
+        if(mapObject.optionsDict["display-photos"].checked)
+        {
+            this.showPhotos = true;
+        }
+        else
+        {
+            this.showPhotos = false;
+        }
+
+        if(mapObject.optionsDict["photo-pause"].checked)
+        {
+            this.pauseOnPhoto = true;
+        }
+        else
+        {
+            this.pauseOnPhoto = false;
+        }
+
+        if(mapObject.optionsDict["enable-recording"].checked)
+        {
+            this.recordingEnabled = true;
+        }
+        else
+        {
+            this.recordingEnabled = false;
+        }
+
+        if(mapObject.optionsDict["use-fullscreen"].checked)
+        {
+            this.useFullscreen = true;
+        }
+        else
+        {
+            this.useFullscreen = false;
+        }
+
+        this.pauseDuration = mapObject.optionsDict["pause-duration"].value;
+        this.photoDisplayType = mapObject.optionsDict["display-select"].options[mapObject.optionsDict["display-select"].selectedIndex ].value; 
+
+        console.log("easy options loaded!!!")
         
         setTimeout( function() 
         { 
@@ -522,8 +593,30 @@ class MapClass
                 
                 mapObject.markerExist = false;
             }
+            
+            
+
+            if(mapObject.optionsDict["show-elevation"].checked)
+            {
+                document.getElementById('elevation-widget').style.display = "block";
+                try
+                {
+                    elevationWidget.calculate(mapObject.points);
+                }
+                catch(err)
+                {
+                    console.log(err)
+                }
+                mapObject.showElevation = true;
+            }
+            else
+            {
+                document.getElementById('elevation-widget').style.display = "none";
+                mapObject.showElevation = false;
+            }
 
 
+            
 
             if(mapObject.optionsDict["enable-elevation"].checked)
             {
@@ -539,94 +632,9 @@ class MapClass
             }
 
         },
-         500);
+         800);
 
         
-        if(mapObject.optionsDict["show-title"].checked)
-        {
-            document.getElementById("title-widget").innerHTML = upload.name;
-        }
-        else
-        {
-            document.getElementById("title-widget").innerHTML = "";
-        }
-
-        if(mapObject.optionsDict["show-distance"].checked)
-        {
-            this.showDistance = true;
-        }
-        else
-        {
-            this.showDistance = false;
-        }
-
-        if(mapObject.optionsDict["show-elevation"].checked)
-        {
-            document.getElementById('elevation-widget').style.display = "block";
-            try
-            {
-                elevationWidget.calculate(this.points);
-            }
-            catch
-            {
-
-            }
-            this.showElevation = true;
-        }
-        else
-        {
-            document.getElementById('elevation-widget').style.display = "none";
-            this.showElevation = false;
-        }
-        
-        if(mapObject.optionsDict["rotate-camera"].checked)
-        {
-            this.rotateCamera = true;
-        }
-        else
-        {
-            this.rotateCamera = false;
-        }
-
-        if(mapObject.optionsDict["display-photos"].checked)
-        {
-            this.showPhotos = true;
-        }
-        else
-        {
-            this.showPhotos = false;
-        }
-
-        if(mapObject.optionsDict["photo-pause"].checked)
-        {
-            this.pauseOnPhoto = true;
-        }
-        else
-        {
-            this.pauseOnPhoto = false;
-        }
-
-        if(mapObject.optionsDict["enable-recording"].checked)
-        {
-            this.recordingEnabled = true;
-        }
-        else
-        {
-            this.recordingEnabled = false;
-        }
-
-        if(mapObject.optionsDict["use-fullscreen"].checked)
-        {
-            this.useFullscreen = true;
-        }
-        else
-        {
-            this.useFullscreen = false;
-        }
-
-
-        this.pauseDuration = mapObject.optionsDict["pause-duration"].value;
-        this.photoDisplayType = mapObject.optionsDict["display-select"].options[mapObject.optionsDict["display-select"].selectedIndex ].value 
         
      
     }

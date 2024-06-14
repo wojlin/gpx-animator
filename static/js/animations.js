@@ -321,7 +321,7 @@ class TrackAnimation
                 this.hardRestart();
             }
 
-            console.log(this.current, recorder.isRecording)
+            //console.log(this.current)
  
             let output = mapObject.interpolatePoints(this.points, this.current);
             let point = output["point"];
