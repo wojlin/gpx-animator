@@ -30,7 +30,7 @@ class ElevationWidget
         // Extract elevations from the points
         const elevations = points.map(point => point[2]);
         // Extract distances from the points
-        const distances = points.map(point => point[3]);
+        const distances = points.map(point => point[4]);
         
 
         // Round distances to single digit after decimal and add unit "km"

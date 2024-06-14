@@ -49,6 +49,10 @@
             <h1>Images</h1>
             <h2>(click on image and then drag marker to place)</h2>
             <div id="image-tab-content"></div>
+            <div id="image-placer">
+                <button onclick="dragAndDrop.autoplacerMarkers('timestamp', this);" class="image-placer">Place By Timestamp</button>
+                <button style="float:right;" onclick="dragAndDrop.autoplacerMarkers('geotag', this);" class="image-placer">Place By Geotag</button>
+            </div>
         </div>
 
         <div id="options-tab">
@@ -433,6 +437,8 @@
         <script src="static/js/imagePlacer.js"></script>
         <script src="static/js/map.js"></script>
         <script src="static/js/fileUpload.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
 
     </body>
 </html>    

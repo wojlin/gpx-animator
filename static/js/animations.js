@@ -336,7 +336,7 @@ class TrackAnimation
                 for(let i  = 0; i < this.points.length; i ++)
                 {   
                     elevationWidget.data.push(null);
-                    if(point[3] < this.points[i][3])
+                    if(point[4] < this.points[i][4])
                     {
                         break;
                     }
@@ -352,7 +352,7 @@ class TrackAnimation
             
             if(mapObject.showDistance)
             {
-                document.getElementById("show-distance-text").innerHTML =  parseFloat(point[3]).toFixed(1).toString() + " KM";
+                document.getElementById("show-distance-text").innerHTML =  parseFloat(point[4]).toFixed(1).toString() + " KM";
             }
 
             if(!(!mapObject.map.getSource('glow')))
@@ -395,6 +395,13 @@ class TrackAnimation
 
                         if(mapObject.pauseOnPhoto)
                         {
+                            if(mapObject.photoDisplayType == "marker")
+                            {
+                                setTimeout(function()
+                                {
+                                    marker.style.display = "none";
+                                },  mapObject.pauseDuration * 1000 ); 
+                            }
                             await this.sleep(mapObject.pauseDuration * 1000 * urls.length);
                             this.startTime += mapObject.pauseDuration * 1000 * urls.length;
                         }

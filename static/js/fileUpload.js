@@ -13,6 +13,7 @@ class fileUpload{
         this.file;
 
 
+
         this.onChange = this.onChange.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
         this.onDragLeave = this.onDragLeave.bind(this);
@@ -35,6 +36,8 @@ class fileUpload{
         this.gpx = null;
         this.name = null;
         this.photos = [];
+        this.creationTimes = [];
+        this.geotags = [];
 
     }
 
@@ -64,8 +67,16 @@ class fileUpload{
         event.preventDefault(); 
         //getting user select file and [0] this means if user select multiple files then we'll select only the first one
         this.file = event.dataTransfer.files;
-        console.log(this.file)
         this.showFile(); //calling function
+    }
+
+
+    ConvertDMSToDD(degrees, minutes, seconds, direction) {
+        var dd = degrees + (minutes/60) + (seconds/3600);
+        if (direction == "S" || direction == "W") {
+            dd = dd * -1;
+        }
+        return dd;
     }
 
 
@@ -121,7 +132,8 @@ class fileUpload{
                             let x = parseFloat(pointsRaw[a].getAttribute("lat"));
                             let y = parseFloat(pointsRaw[a].getAttribute("lon"));
                             let z = parseFloat(pointsRaw[a].getElementsByTagName("ele")[0].innerHTML);
-                            points.push([x,y,z]);
+                            let t = pointsRaw[a].getElementsByTagName("time")[0].innerHTML;
+                            points.push([x,y,z,t]);
                         }
                         
                         console.log(name)
@@ -163,11 +175,70 @@ class fileUpload{
                     fileReader.onload = ()=>
                     {
 
-                        let fileContent = fileReader.result;          
+                        let fileContent = fileReader.result;    
+
                         
-                        this.photos.push(fileContent);
+
+
+                        EXIF.getData(this.file[i], function() 
+                        {
+                            let creation = [];
+                            let geotag = [];
+
+                            let tags = EXIF.getAllTags(this);
+                            console.log(tags)
+     
+                            let creationDate = tags.DateTime || tags.DateTimeOrginal;
+                            if (creationDate) {
+                                creation = creationDate.split(/[:\s]/);
+
+                            } else 
+                            {
+                                console.log("Creation date not found in EXIF data.");
+                            }
+
+                            let gpsLat = tags.GPSLatitude;
+                            let gpsLon = tags.GPSLongitude;
+                            if(gpsLat && gpsLon)
+                            {
+                                // get latitude from exif data and calculate latitude decimal
+                                let latDegree = tags.GPSLatitude[0];
+                                let latMinute = tags.GPSLatitude[1];
+                                let latSecond = tags.GPSLatitude[2];
+                                let latDirection = tags.GPSLatitudeRef;
+
+                                let latFinal = upload.ConvertDMSToDD(latDegree, latMinute, latSecond, latDirection);
+                                //console.log(latFinal);
+
+                                // get longitude from exif data and calculate longitude decimal
+                                let lonDegree = tags.GPSLongitude[0];
+                                let lonMinute = tags.GPSLongitude[1];
+                                let lonSecond = tags.GPSLongitude[2];
+                                let lonDirection = tags.GPSLongitudeRef;
+
+                                let lonFinal = upload.ConvertDMSToDD(lonDegree, lonMinute, lonSecond, lonDirection);
+                                //console.log(lonFinal);
+
+                                geotag = [latFinal, lonFinal];
+                                console.log(geotag)
+                 
+                            }
+                            else
+                            {
+                                console.log("Geotags not found in EXIF data.")
+                            }
+
+                            console.log(creation, geotag)
+
+                            upload.photos.push(fileContent);
+                            upload.creationTimes.push(creation)
+                            upload.geotags.push(geotag)
+                            
+                            document.getElementById("upload-text").innerHTML = "uploaded " + upload.photos.length + " images";
+                            
+                        });
+
                         
-                        document.getElementById("upload-text").innerHTML = "uploaded " + this.photos.length + " images";
             
 
                     }
@@ -243,7 +314,7 @@ class fileUpload{
                     trackAnimation.updatePoints(upload.gpx);
                 }, 3000);
 
-                images.init(upload.photos);
+                images.init(upload.photos, upload.creationTimes, upload.geotags);
 
             }, 2500); 
         }

@@ -984,3 +984,39 @@ body
   transition: all 5s !important;
   bottom: -40vh !important;
 }
+
+#image-placer
+{
+  position: absolute;
+  bottom: 2vh;
+  width: 80%;
+  left:0;
+  right:0;
+  margin:auto;
+  border-top: solid white 0.2vh;
+  padding-top:1vh; 
+}
+
+.image-placer 
+{
+  width:45%;
+  margin:auto;
+  display: inline;
+  color:white;
+  background: black;
+  border: solid 0.2vh rgb(255, 255, 255);
+  border-radius: 1vh;
+  font-size: 1.5vh;
+  padding: 0.5vh;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+
+
+
+.image-placer:hover
+{
+  transform: scale(1.1);
+  opacity: 0.8;
+}

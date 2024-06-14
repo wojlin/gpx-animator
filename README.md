@@ -2,7 +2,7 @@
 
 ## Link
 
-### [Go to website](https://github.io/wojlin/gpx-animator)
+### [Go to website](https://wojlin.github.io/gpx-animator/)
 
 ## About
 
@@ -12,13 +12,16 @@ Introducing our innovative web application that brings your outdoor adventures t
 
 ### Frameworks used:
 - [maptiler](https://documentation.maptiler.com/hc/en-us)
-- [chartjs](https://www.chartjs.org/)
+- [chartjs](https://www.chartjs.org/) 
+- [exif-js](https://github.com/exif-js/exif-js)
+
+<img src="static/images/maptiler-logo.png" alt="drawing" width="100"/>
+<img src="static/images/chartjs.png" alt="drawing" width="100"/>
+<img src="static/images/exif.png" alt="drawing" width="100"/>
 
 
 ### TODO:
-- reduce ram usage on lower animations speeds
-- fix elevation enable/disable bug
-- implement keybindings
 - implement image placing system
 - test app with diffrent gpx routes
 - more bug-proofing
+- bug: animation is restarting on animation end and track goes back to start wihout clearing
